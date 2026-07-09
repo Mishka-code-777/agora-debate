@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Debate — Agora" data-ru="Дебат — Agora">Debate — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container">
+    <div id="debate-root"></div>
+  </div></main>
+
+  <!-- Report debate confirmation dialog -->
+  <div class="dialog-backdrop" id="report-debate-dialog" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="rdd-title">
+      <div class="dialog__header"><h2 id="rdd-title" data-en="Report debate" data-ru="Пожаловаться на дебат">Report debate</h2>
+        <button class="icon-btn" data-close-dialog data-en-aria="Close" data-ru-aria="Закрыть"><span data-icon="x"></span></button></div>
+      <div class="dialog__body stack">
+        <div class="notice">
+          <span data-icon="info"></span>
+          <span data-en="Describe what the participant has done wrong." data-ru="Опишите, что участник сделал не так.">Describe what the participant has done wrong.</span>
+        </div>
+        <div class="report-options">
+          <label class="choice"><input type="radio" name="reason" value="explicit-language" /><span data-en="User uses explicit language" data-ru="Использует нецензурную лексику">User uses explicit language</span></label>
+          <label class="choice"><input type="radio" name="reason" value="advertisements" /><span data-en="User places advertisements" data-ru="Размещает рекламу">User places advertisements</span></label>
+          <label class="choice"><input type="radio" name="reason" value="malicious-links" /><span data-en="User places malicious links" data-ru="Размещает вредоносные ссылки">User places malicious links</span></label>
+          <label class="choice"><input type="radio" name="reason" value="spam" /><span data-en="User spams or floods" data-ru="Спамит или флудит">User spams or floods</span></label>
+          <label class="choice"><input type="radio" name="reason" value="nsfw" /><span data-en="User shares NSFW content" data-ru="Делится NSFW-контентом">User shares NSFW content</span></label>
+          <label class="choice"><input type="radio" name="reason" value="other" id="report-reason-other" /><span data-en="Other" data-ru="Другое">Other</span></label>
+        </div>
+        <div class="field" id="report-other-field" hidden>
+          <label class="label" for="report-desc" data-en="Description" data-ru="Описание">Description</label>
+          <textarea class="textarea" id="report-desc" data-en-ph="Describe the problem…" data-ru-ph="Опишите проблему…"></textarea>
+        </div>
+        <div class="field">
+          <label class="captcha"><input type="checkbox" id="report-captcha" /><span class="box"></span><span data-en="I am not a robot" data-ru="Я не робот">I am not a robot</span></label>
+        </div>
+      </div>
+      <div class="dialog__footer">
+        <button class="btn btn--ghost" data-close-dialog data-en="Cancel" data-ru="Отмена">Cancel</button>
+        <button class="btn btn--danger" id="confirm-report-debate" data-en="Submit report" data-ru="Отправить жалобу">Submit report</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      var id = Agora.qs("id");
+      var d = id && Store.getDebate(id);
+      var root = document.getElementById("debate-root");
+
+      if (!d) {
+        document.getElementById("report-debate-dialog").hidden = true;
+        root.innerHTML =
+          '<div class="empty-state"><span data-icon="search"></span>' +
+          '<h3 data-en="Debate not found" data-ru="Дебат не найден">Debate not found</h3>' +
+          '<p data-en="This debate does not exist or has been removed." data-ru="Этот дебат не существует или был удалён.">This debate does not exist or has been removed.</p>' +
+          '<a class="btn btn--primary" href="debates.html" style="margin-top:var(--sp-4)"><span data-icon="arrowLeft"></span><span data-en="Back to debates" data-ru="К списку дебатов">Back to debates</span></a></div>';
+        Agora.localize();
+        return;
+      }
+
+      document.title = d.topic + " — Agora";
+
+      var me = Store.currentUser();
+      var isAuthor = me && me.username === d.authorUsername;
+      var isParticipant = me && d.participants.indexOf(me.username) >= 0;
+
+      var st = Agora.statusMeta(d.status);
+      var loc = Agora.locationText(d);
+      var pt = Agora.participantsText(d);
+
+      /* ---- Location key value ---- */
+      var locVal;
+      if (d.locationType === "geo") {
+        locVal = d.geoLocation
+          ? { en: Agora.esc(d.geoLocation), ru: Agora.esc(d.geoLocation) }
+          : { en: "In person", ru: "Очно" };
+      } else if (d.locationType === "virtual") {
+        locVal = { en: "Online", ru: "Онлайн" };
+      } else {
+        locVal = { en: "Not determined yet", ru: "Пока не задано" };
+      }
+
+      /* ---- When key value ---- */
+      var whenVal = d.dateTimeHeld
+        ? { en: Agora.esc(d.dateTimeHeld), ru: Agora.esc(d.dateTimeHeld) }
+        : { en: "Not scheduled", ru: "Не назначено" };
+
+      function kvRow(ken, kru, ven, vru) {
+        return (
+          '<div class="kv__row">' +
+            '<div class="kv__k" data-en="' + Agora.esc(ken) + '" data-ru="' + Agora.esc(kru) + '">' + Agora.esc(ken) + "</div>" +
+            '<div class="kv__v" data-en="' + ven + '" data-ru="' + vru + '">' + ven + "</div>" +
+          "</div>"
+        );
+      }
+
+      /* ---- Main column ---- */
+      var descHtml = d.description
+        ? '<p data-en="' + Agora.esc(d.description) + '" data-ru="' + Agora.esc(d.description) + '">' + Agora.esc(d.description) + "</p>"
+        : '<p class="muted" data-en="No description provided." data-ru="Описание не указано.">No description provided.</p>';
+
+      var main =
+        '<div class="detail-head">' +
+          '<div class="cluster" style="margin-bottom:var(--sp-3)">' +
+            '<span class="badge ' + st.cls + '" data-en="' + Agora.esc(st.en) + '" data-ru="' + Agora.esc(st.ru) + '">' + Agora.esc(st.en) + "</span>" +
+            '<span class="badge badge--secondary badge--no-dot" data-en="' + Agora.esc(loc.en) + '" data-ru="' + Agora.esc(loc.ru) + '">' + Agora.esc(loc.en) + "</span>" +
+          "</div>" +
+          "<h1>" + Agora.esc(d.topic) + "</h1>" +
+          descHtml +
+        "</div>";
+
+      /* ---- Details card ---- */
+      main +=
+        '<div class="card"><div class="card__body">' +
+          '<div class="kv">' +
+            kvRow("Status", "Статус", Agora.esc(st.en), Agora.esc(st.ru)) +
+            kvRow("Location", "Место", locVal.en, locVal.ru) +
+            kvRow("Participants", "Участники", Agora.esc(pt.en), Agora.esc(pt.ru)) +
+            kvRow("Date & time", "Дата и время", whenVal.en, whenVal.ru) +
+          "</div>" +
+        "</div></div>";
+
+      /* ---- How to join (virtual only) ---- */
+      if (d.locationType === "virtual") {
+        var vplats = (d.virtualPlatforms || []).filter(function (v) { return v.hidden === false; });
+        var joinItems;
+        if (vplats.length) {
+          joinItems = vplats.map(function (v) {
+            var links = "";
+            if (v.participantLink) {
+              links +=
+                '<a href="' + Agora.esc(v.participantLink) + '" target="_blank" rel="noopener" class="btn btn--link btn--sm">' +
+                  '<span data-icon="external"></span><span data-en="Participant link" data-ru="Ссылка для участников">Participant link</span></a>';
+            }
+            if (v.viewerLink) {
+              links +=
+                '<a href="' + Agora.esc(v.viewerLink) + '" target="_blank" rel="noopener" class="btn btn--link btn--sm">' +
+                  '<span data-icon="eye"></span><span data-en="Viewer link" data-ru="Ссылка для зрителей">Viewer link</span></a>';
+            }
+            var desc = v.description
+              ? '<div class="contact-item__desc" data-en="' + Agora.esc(v.description) + '" data-ru="' + Agora.esc(v.description) + '">' + Agora.esc(v.description) + "</div>"
+              : "";
+            return (
+              '<div class="contact-item">' +
+                '<span data-icon="link"></span>' +
+                '<div class="contact-item__body">' +
+                  '<div class="contact-item__platform">' + Agora.esc(Agora.platformLabel(v.platform)) + "</div>" +
+                  '<div class="cluster">' + links + "</div>" +
+                  desc +
+                "</div>" +
+              "</div>"
+            );
+          }).join("");
+        } else {
+          joinItems = '<p class="muted" data-en="No join links have been shared yet." data-ru="Ссылки для подключения пока не добавлены.">No join links have been shared yet.</p>';
+        }
+        main +=
+          '<div class="section" style="margin-top:var(--sp-6)">' +
+            '<h2 class="settings-row__label" style="margin-bottom:var(--sp-3)" data-en="How to join" data-ru="Как подключиться">How to join</h2>' +
+            '<div class="contact-list">' + joinItems + "</div>" +
+          "</div>";
+      }
+
+      /* ---- Organiser contacts ---- */
+      var author = Store.getUser(d.authorUsername);
+      var contacts = Store.publicContacts(author);
+      var contactItems;
+      if (contacts.length) {
+        contactItems = contacts.map(function (c) {
+          var desc = c.description
+            ? '<div class="contact-item__desc" data-en="' + Agora.esc(c.description) + '" data-ru="' + Agora.esc(c.description) + '">' + Agora.esc(c.description) + "</div>"
+            : "";
+          return (
+            '<div class="contact-item">' +
+              '<span data-icon="user"></span>' +
+              '<div class="contact-item__body">' +
+                '<div class="contact-item__platform">' + Agora.esc(Agora.platformLabel(c.platform)) + "</div>" +
+                '<div class="contact-item__id">' + Agora.esc(c.identifier) + "</div>" +
+                desc +
+              "</div>" +
+            "</div>"
+          );
+        }).join("");
+      } else {
+        contactItems = '<p class="muted" data-en="The organiser has not shared any public contacts." data-ru="Организатор не указал публичных контактов.">The organiser has not shared any public contacts.</p>';
+      }
+      main +=
+        '<div class="section" style="margin-top:var(--sp-6)">' +
+          '<h2 class="settings-row__label" style="margin-bottom:var(--sp-3)" data-en="Organiser contacts" data-ru="Контакты организатора">Organiser contacts</h2>' +
+          '<div class="contact-list">' + contactItems + "</div>" +
+        "</div>";
+
+      /* ---- Aside ---- */
+      var actionBtn;
+      if (isAuthor) {
+        actionBtn =
+          '<a class="btn btn--ghost btn--block" href="debate-config.html?id=' + encodeURIComponent(d.id) + '">' +
+            '<span data-icon="edit"></span><span data-en="Edit debate" data-ru="Редактировать">Edit debate</span></a>';
+      } else if (isParticipant) {
+        actionBtn =
+          '<button class="btn btn--ghost btn--block" id="withdraw-btn">' +
+            '<span data-icon="logout"></span><span data-en="Withdraw from participation" data-ru="Выйти из участия">Withdraw from participation</span></button>';
+      } else {
+        actionBtn =
+          '<button class="btn btn--primary btn--block" id="participate-btn">' +
+            '<span data-icon="check"></span><span data-en="Participate" data-ru="Участвовать">Participate</span></button>';
+      }
+
+      var authorMono = Agora.esc((d.authorUsername[0] || "?").toUpperCase());
+      var aside =
+        '<aside class="side-card"><div class="card"><div class="card__body stack">' +
+          "<div>" +
+            '<div class="kv__k" style="margin-bottom:var(--sp-2)" data-en="Organised by" data-ru="Организатор">Organised by</div>' +
+            '<a class="user-card" href="user.html?u=' + encodeURIComponent(d.authorUsername) + '">' +
+              '<span class="avatar' + Agora.avatarVariant(d.authorUsername) + '">' + authorMono + "</span>" +
+              '<span class="user-card__body"><span class="user-card__name">' + Agora.esc(d.authorUsername) + "</span></span>" +
+            "</a>" +
+          "</div>" +
+          actionBtn +
+          '<button class="btn btn--danger-ghost btn--block" data-open-dialog="report-debate-dialog">' +
+            '<span data-icon="flag"></span><span data-en="Report debate" data-ru="Пожаловаться на дебат">Report debate</span></button>' +
+        "</div></div></aside>";
+
+      root.innerHTML = '<div class="detail-grid"><div>' + main + "</div>" + aside + "</div>";
+
+      Agora.localize();
+
+      /* ---- Wiring ---- */
+      function guestGuard() {
+        if (!Store.currentUser()) {
+          location.href = "login.html?next=" + encodeURIComponent(location.pathname.split("/").pop() + location.search);
+          return false;
+        }
+        return true;
+      }
+
+      var pBtn = document.getElementById("participate-btn");
+      if (pBtn) {
+        pBtn.addEventListener("click", function () {
+          if (!guestGuard()) return;
+          Store.participate(id);
+          location.reload();
+        });
+      }
+      var wBtn = document.getElementById("withdraw-btn");
+      if (wBtn) {
+        wBtn.addEventListener("click", function () {
+          if (!guestGuard()) return;
+          Store.withdraw(id);
+          location.reload();
+        });
+      }
+
+      /* ---- Report dialog ---- */
+      var otherRadio = document.getElementById("report-reason-other");
+      var otherField = document.getElementById("report-other-field");
+      document.querySelectorAll('input[name="reason"]').forEach(function (r) {
+        r.addEventListener("change", function () {
+          otherField.hidden = !otherRadio.checked;
+        });
+      });
+
+      document.getElementById("confirm-report-debate").addEventListener("click", function () {
+        if (!guestGuard()) return;
+        var picked = document.querySelector('input[name="reason"]:checked');
+        if (!picked) { Agora.toast(Agora.t("Please choose a reason", "Выберите причину"), "danger"); return; }
+        if (!document.getElementById("report-captcha").checked) {
+          Agora.toast(Agora.t("Please confirm you are not a robot", "Подтвердите, что вы не робот"), "danger");
+          return;
+        }
+        var reason = picked.value;
+        var description = reason === "other" ? document.getElementById("report-desc").value.trim() : "";
+        Store.addReport({ type: "debate", targetId: id, reason: reason, description: description });
+        Agora.toast(Agora.t("Report submitted", "Жалоба отправлена"), "success");
+        var back = document.getElementById("report-debate-dialog");
+        back.hidden = true;
+        document.body.style.overflow = "";
+      });
+    };
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

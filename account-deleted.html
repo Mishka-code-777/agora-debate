@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Account deleted — Agora" data-ru="Аккаунт удалён — Agora">Account deleted — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container">
+    <div class="centered">
+      <div class="big-icon"><span data-icon="check"></span></div>
+      <h1 id="ad-title" data-en="Account successfully deleted" data-ru="Аккаунт успешно удалён">Account successfully deleted</h1>
+      <p id="ad-text" data-en="The account has been successfully deleted." data-ru="Аккаунт был успешно удалён.">The account has been successfully deleted.</p>
+      <a class="btn btn--primary btn--lg" href="index.html" data-en="Go to index page" data-ru="На главную">Go to index page</a>
+    </div>
+  </div></main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      var name = Agora.qs("u") || "";
+      var titleEn = name ? "Account " + name + " successfully deleted" : "Account successfully deleted";
+      var titleRu = name ? "Аккаунт " + name + " успешно удалён" : "Аккаунт успешно удалён";
+      var textEn = name ? "Account " + name + " has been successfully deleted." : "The account has been successfully deleted.";
+      var textRu = name ? "Аккаунт " + name + " был успешно удалён." : "Аккаунт был успешно удалён.";
+
+      var title = document.getElementById("ad-title");
+      title.setAttribute("data-en", titleEn); title.setAttribute("data-ru", titleRu);
+      title.textContent = Agora.t(titleEn, titleRu);
+
+      var text = document.getElementById("ad-text");
+      text.setAttribute("data-en", textEn); text.setAttribute("data-ru", textRu);
+      text.textContent = Agora.t(textEn, textRu);
+    };
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

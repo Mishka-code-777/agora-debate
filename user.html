@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="User — Agora" data-ru="Пользователь — Agora">User — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "" };</script>
+  <style>
+    /* Scoped: header row pairing the large avatar with the title (no existing class) */
+    .user-detail-head { display: flex; align-items: center; gap: var(--sp-4); margin-bottom: var(--sp-4); }
+    .user-detail-head h1 { margin: 0; word-break: break-word; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container">
+    <div class="breadcrumbs">
+      <a href="users.html" data-en="Users" data-ru="Пользователи">Users</a>
+      <span>/</span>
+      <span id="crumb">—</span>
+    </div>
+
+    <div id="user-root"></div>
+  </div></main>
+
+  <!-- Report user confirmation dialog -->
+  <div class="dialog-backdrop" id="report-user-dialog" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="rud-title">
+      <div class="dialog__header"><h2 id="rud-title" data-en="Report user" data-ru="Пожаловаться на пользователя">Report user</h2>
+        <button class="icon-btn" data-close-dialog data-en-aria="Close" data-ru-aria="Закрыть"><span data-icon="x"></span></button></div>
+      <div class="dialog__body stack">
+        <div class="notice">
+          <span data-icon="info"></span>
+          <span data-en="Describe what the participant has done wrong." data-ru="Опишите, что участник сделал не так.">Describe what the participant has done wrong.</span>
+        </div>
+        <div class="report-options">
+          <label class="choice"><input type="radio" name="reason" value="explicit-language" checked /><span data-en="User uses explicit language" data-ru="Использует нецензурную лексику">User uses explicit language</span></label>
+          <label class="choice"><input type="radio" name="reason" value="advertisements" /><span data-en="User places advertisements" data-ru="Размещает рекламу">User places advertisements</span></label>
+          <label class="choice"><input type="radio" name="reason" value="malicious-links" /><span data-en="User places malicious links" data-ru="Размещает вредоносные ссылки">User places malicious links</span></label>
+          <label class="choice"><input type="radio" name="reason" value="spam" /><span data-en="User spams or floods" data-ru="Спамит или флудит">User spams or floods</span></label>
+          <label class="choice"><input type="radio" name="reason" value="nsfw" /><span data-en="User shares NSFW content" data-ru="Делится NSFW-контентом">User shares NSFW content</span></label>
+          <label class="choice"><input type="radio" name="reason" value="other" /><span data-en="Other" data-ru="Другое">Other</span></label>
+        </div>
+        <div class="field" id="report-other-field" hidden>
+          <label class="label" for="report-desc" data-en="Description" data-ru="Описание">Description</label>
+          <textarea class="textarea" id="report-desc" data-en-ph="Describe what the participant has done wrong…" data-ru-ph="Опишите, что участник сделал не так…"></textarea>
+        </div>
+        <div class="field">
+          <label class="captcha"><input type="checkbox" id="report-captcha" /><span class="box"></span><span data-en="I am not a robot" data-ru="Я не робот">I am not a robot</span></label>
+        </div>
+      </div>
+      <div class="dialog__footer">
+        <button class="btn btn--ghost" data-close-dialog data-en="Cancel" data-ru="Отмена">Cancel</button>
+        <button class="btn btn--danger" id="confirm-report-user" data-en="Submit report" data-ru="Отправить жалобу">Submit report</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      var name = Agora.qs("u");
+      var u = name && Store.getUser(name);
+
+      var root = document.getElementById("user-root");
+
+      if (!u) {
+        document.getElementById("crumb").setAttribute("data-en", "Not found");
+        document.getElementById("crumb").setAttribute("data-ru", "Не найдено");
+        document.getElementById("crumb").textContent = Agora.t("Not found", "Не найдено");
+        root.innerHTML =
+          '<div class="centered">' +
+            '<span class="big-icon" data-icon="user"></span>' +
+            '<h1 data-en="User not found" data-ru="Пользователь не найден">User not found</h1>' +
+            '<p data-en="This user does not exist or has been removed." data-ru="Этот пользователь не существует или был удалён.">This user does not exist or has been removed.</p>' +
+            '<a class="btn btn--primary" href="users.html"><span data-icon="arrowLeft"></span><span data-en="Back to users" data-ru="К пользователям">Back to users</span></a>' +
+          '</div>';
+        Agora.localize();
+        return;
+      }
+
+      // Titles
+      document.title = "User " + u.username + " — Agora";
+      document.getElementById("crumb").textContent = u.username;
+
+      var mono = (u.username[0] || "?").toUpperCase();
+
+      // Empty note helper
+      function emptyNote(en, ru) {
+        return '<p class="muted" data-en="' + Agora.esc(en) + '" data-ru="' + Agora.esc(ru) + '">' + Agora.esc(en) + '</p>';
+      }
+
+      // Debate sections
+      var created = Store.getDebates({ author: u.username });
+      var participating = Store.getDebates({ participant: u.username }).filter(function (d) { return d.status !== "cancelled"; });
+      var before = Store.getDebates({ participant: u.username }).filter(function (d) { return d.status === "cancelled"; });
+
+      function debateSection(titleEn, titleRu, list, noteEn, noteRu) {
+        return (
+          '<section class="section">' +
+            '<h2 data-en="' + Agora.esc(titleEn) + '" data-ru="' + Agora.esc(titleRu) + '">' + Agora.esc(titleEn) + '</h2>' +
+            (list.length
+              ? '<div class="list">' + list.map(Agora.debateCardHTML).join("") + '</div>'
+              : emptyNote(noteEn, noteRu)) +
+          '</section>'
+        );
+      }
+
+      // Contacts (public only)
+      var contacts = Store.publicContacts(u);
+      var contactsHTML = contacts.length
+        ? '<div class="contact-list">' + contacts.map(function (c) {
+            return (
+              '<div class="contact-item">' +
+                '<span data-icon="link"></span>' +
+                '<div class="contact-item__body">' +
+                  '<div class="contact-item__platform">' + Agora.esc(Agora.platformLabel(c.platform)) + '</div>' +
+                  '<div class="contact-item__id">' + Agora.esc(c.identifier) + '</div>' +
+                  (c.description ? '<div class="contact-item__desc">' + Agora.esc(c.description) + '</div>' : "") +
+                '</div>' +
+              '</div>'
+            );
+          }).join("") + '</div>'
+        : emptyNote("No public contacts.", "Нет публичных контактов.");
+
+      var mainHTML =
+        '<div class="user-detail-head">' +
+          '<span class="avatar avatar--lg' + Agora.avatarVariant(u.username) + '">' + Agora.esc(mono) + '</span>' +
+          '<h1 data-en="User ' + Agora.esc(u.username) + '" data-ru="Пользователь ' + Agora.esc(u.username) + '">User ' + Agora.esc(u.username) + '</h1>' +
+        '</div>' +
+        (u.description
+          ? '<p class="lead">' + Agora.esc(u.description) + '</p>'
+          : emptyNote("No description yet.", "Пока нет описания.")) +
+        '<div style="margin-top:var(--sp-6)">' +
+          debateSection("Created debates", "Созданные дебаты", created, "This user has not created any debates yet.", "Этот пользователь ещё не создавал дебатов.") +
+          debateSection("Currently participating in", "Сейчас участвует в", participating, "Not participating in any debates right now.", "Сейчас не участвует ни в одном дебате.") +
+          debateSection("Participated before", "Участвовал ранее", before, "No past debates.", "Нет прошлых дебатов.") +
+        '</div>';
+
+      var asideHTML =
+        '<aside class="side-card">' +
+          '<div class="card">' +
+            '<div class="card__header"><h2 data-en="Contacts" data-ru="Контакты">Contacts</h2></div>' +
+            '<div class="card__body stack">' +
+              contactsHTML +
+              '<button class="btn btn--danger-ghost btn--block" data-open-dialog="report-user-dialog">' +
+                '<span data-icon="flag"></span><span data-en="Report user" data-ru="Пожаловаться">Report user</span>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</aside>';
+
+      root.innerHTML = '<div class="detail-grid"><div>' + mainHTML + '</div>' + asideHTML + '</div>';
+
+      // Report dialog title
+      var rud = document.getElementById("rud-title");
+      rud.setAttribute("data-en", "Report user " + u.username);
+      rud.setAttribute("data-ru", "Пожаловаться на " + u.username);
+
+      Agora.localize();
+
+      // Reveal "other" description textarea
+      document.querySelectorAll('input[name="reason"]').forEach(function (r) {
+        r.addEventListener("change", function () {
+          document.getElementById("report-other-field").hidden = document.querySelector('input[name="reason"]:checked').value !== "other";
+        });
+      });
+
+      // Confirm report
+      document.getElementById("confirm-report-user").addEventListener("click", function () {
+        if (!Store.currentUser()) {
+          location.href = "login.html?next=" + encodeURIComponent(location.pathname.split("/").pop() + location.search);
+          return;
+        }
+        var reason = (document.querySelector('input[name="reason"]:checked') || {}).value || "explicit-language";
+        var description = reason === "other" ? document.getElementById("report-desc").value.trim() : "";
+        Store.addReport({ type: "user", targetId: u.username, reason: reason, description: description });
+        Agora.toast(Agora.t("Report submitted", "Жалоба отправлена"), "success");
+        var back = document.getElementById("report-user-dialog");
+        back.hidden = true; document.body.style.overflow = "";
+      });
+    };
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

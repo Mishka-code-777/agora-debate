@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="My debates — Agora" data-ru="Мои дебаты — Agora">My debates — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container">
+    <div class="list-head">
+      <div class="page-head" style="margin:0"><h1 data-en="My debates" data-ru="Мои дебаты">My debates</h1></div>
+      <a class="btn btn--accent" href="debate-config.html"><span data-icon="plus"></span><span data-en="New debate" data-ru="Создать дебат">New debate</span></a>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="created" id="tab-btn-created" aria-controls="tab-created" aria-selected="true" data-en="Created by me" data-ru="Созданные мной">Created by me</button>
+      <button class="tab" role="tab" data-tab="participating" id="tab-btn-participating" aria-controls="tab-participating" aria-selected="false" data-en="Participating in" data-ru="Участвую">Participating in</button>
+    </div>
+
+    <div class="tabpanel" id="tab-created" role="tabpanel" aria-labelledby="tab-btn-created">
+      <div class="list" id="list-created"></div>
+    </div>
+
+    <div class="tabpanel" id="tab-participating" role="tabpanel" aria-labelledby="tab-btn-participating" hidden>
+      <div class="list" id="list-participating"></div>
+    </div>
+  </div></main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      var user = Agora.requireAuth(); if (!user) return;
+      var $ = function (x) { return document.getElementById(x); };
+
+      function emptyCreated() {
+        return (
+          '<div class="empty-state"><span data-icon="grid"></span>' +
+          '<h3 data-en="You have not created any debates yet." data-ru="Вы ещё не создали ни одного дебата.">You have not created any debates yet.</h3>' +
+          '<p><a class="btn btn--accent" href="debate-config.html"><span data-icon="plus"></span>' +
+          '<span data-en="New debate" data-ru="Создать дебат">New debate</span></a></p></div>'
+        );
+      }
+      function emptyParticipating() {
+        return (
+          '<div class="empty-state"><span data-icon="users"></span>' +
+          '<h3 data-en="You are not participating in any debates yet." data-ru="Вы пока не участвуете в дебатах.">You are not participating in any debates yet.</h3>' +
+          '<p><a class="btn btn--primary" href="debates.html"><span data-icon="search"></span>' +
+          '<span data-en="Browse debates" data-ru="Смотреть дебаты">Browse debates</span></a></p></div>'
+        );
+      }
+
+      var created = Store.getDebates({ author: user.username });
+      var participating = Store.getDebates({ participant: user.username });
+
+      $("list-created").innerHTML = created.length ? created.map(Agora.debateCardHTML).join("") : emptyCreated();
+      $("list-participating").innerHTML = participating.length ? participating.map(Agora.debateCardHTML).join("") : emptyParticipating();
+
+      // Tab switching
+      var tabs = document.querySelectorAll(".tab[data-tab]");
+      tabs.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          tabs.forEach(function (b) {
+            var on = b === btn;
+            b.setAttribute("aria-selected", String(on));
+            $("tab-" + b.getAttribute("data-tab")).hidden = !on;
+          });
+        });
+      });
+
+      Agora.localize();
+    };
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

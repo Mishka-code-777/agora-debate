@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Configure debate — Agora" data-ru="Настройка дебата — Agora">Configure debate — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container container--narrow">
+    <div class="breadcrumbs"><a href="my-debates.html" data-en="My debates" data-ru="Мои дебаты">My debates</a><span>/</span><span id="crumb" data-en="New debate" data-ru="Новый дебат">New debate</span></div>
+    <div class="page-head"><h1 id="page-title" data-en="New debate" data-ru="Новый дебат">New debate</h1></div>
+
+    <form id="debate-form" class="card"><div class="card__body stack">
+      <div class="field">
+        <label class="label" for="f-topic" data-en="Topic" data-ru="Тема">Topic</label>
+        <input class="input" id="f-topic" data-en-ph="What is the debate about?" data-ru-ph="О чём дебаты?" />
+      </div>
+
+      <div class="field">
+        <label class="label" for="f-status" data-en="Status" data-ru="Статус">Status</label>
+        <select class="select" id="f-status">
+          <option value="looking" data-en="Looking for participants" data-ru="Ищем участников">Looking for participants</option>
+          <option value="awaiting" data-en="Awaiting" data-ru="Ожидание">Awaiting</option>
+          <option value="cancelled" data-en="Cancelled" data-ru="Отменён">Cancelled</option>
+          <option value="ongoing" data-en="Ongoing (triggered on date and time held, if specified)" data-ru="Идёт сейчас (запускается в дату и время проведения, если указаны)">Ongoing (triggered on date and time held, if specified)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="label" for="f-pmode" data-en="Number of participants" data-ru="Число участников">Number of participants</label>
+        <select class="select" id="f-pmode">
+          <option value="undetermined" data-en="Undetermined" data-ru="Не задано">Undetermined</option>
+          <option value="limited" data-en="Limited" data-ru="Ограничено">Limited</option>
+        </select>
+      </div>
+      <div class="field" id="limit-field" hidden>
+        <label class="label" for="f-limit" data-en="Maximum participants" data-ru="Максимум участников">Maximum participants</label>
+        <input class="input" id="f-limit" type="number" min="2" value="6" />
+      </div>
+
+      <div class="field">
+        <label class="label" for="f-date" data-en="Date and time held" data-ru="Дата и время проведения"><span data-en="Date and time held" data-ru="Дата и время проведения">Date and time held</span> <span class="optional" data-en="(optional)" data-ru="(необязательно)">(optional)</span></label>
+        <input class="input" id="f-date" type="datetime-local" />
+      </div>
+
+      <div class="field">
+        <label class="label" for="f-publicity" data-en="Publicity" data-ru="Публичность">Publicity</label>
+        <select class="select" id="f-publicity">
+          <option value="undetermined" data-en="Currently undetermined" data-ru="Пока не задано">Currently undetermined</option>
+          <option value="public" data-en="Public — anybody can view an ongoing debate" data-ru="Публичный — любой может смотреть идущий дебат">Public — anybody can view an ongoing debate</option>
+          <option value="private" data-en="Private — nobody can view an ongoing debate" data-ru="Приватный — никто не может смотреть идущий дебат">Private — nobody can view an ongoing debate</option>
+        </select>
+        <p class="field-hint" data-en="If a debate is private, it is never shown in the debates list while ongoing." data-ru="Приватный дебат никогда не показывается в списке, пока идёт.">If a debate is private, it is never shown in the debates list while ongoing.</p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="f-loc" data-en="Location" data-ru="Место">Location</label>
+        <select class="select" id="f-loc">
+          <option value="undetermined" data-en="Currently undetermined" data-ru="Пока не задано">Currently undetermined</option>
+          <option value="geo" data-en="Geographical location" data-ru="Географическое место">Geographical location</option>
+          <option value="virtual" data-en="Virtual location" data-ru="Виртуальная площадка">Virtual location</option>
+        </select>
+      </div>
+
+      <div class="field" id="geo-field" hidden>
+        <label class="label" for="f-geo" data-en="Address / place" data-ru="Адрес / место">Address / place</label>
+        <input class="input" id="f-geo" data-en-ph="e.g. Café Central, Berlin" data-ru-ph="напр. Café Central, Берлин" />
+      </div>
+
+      <div id="vloc-block" hidden>
+        <label class="label" data-en="Virtual platforms" data-ru="Виртуальные площадки">Virtual platforms</label>
+        <div class="widget-rows" id="vloc-rows"></div>
+        <button type="button" class="btn btn--ghost btn--sm" id="add-vloc" style="margin-top:var(--sp-3)"><span data-icon="plus"></span><span data-en="Add new platform" data-ru="Добавить площадку">Add new platform</span></button>
+      </div>
+
+      <div class="field">
+        <label class="label" for="f-desc" data-en="Description" data-ru="Описание">Description</label>
+        <textarea class="textarea" id="f-desc" data-en-ph="Describe the format, rules, expectations…" data-ru-ph="Опишите формат, правила, ожидания…"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit" data-en="Save" data-ru="Сохранить">Save</button>
+        <a class="btn btn--ghost" id="cancel-btn" href="my-debates.html" data-en="Cancel" data-ru="Отмена">Cancel</a>
+        <span style="flex:1"></span>
+        <button class="btn btn--danger-ghost" type="button" id="delete-btn" data-open-dialog="delete-debate-dialog" hidden><span data-icon="trash"></span><span data-en="Delete" data-ru="Удалить">Delete</span></button>
+      </div>
+    </div></form>
+  </div></main>
+
+  <!-- Delete debate confirmation dialog -->
+  <div class="dialog-backdrop" id="delete-debate-dialog" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="ddd-title">
+      <div class="dialog__header"><h2 id="ddd-title" data-en="Delete debate" data-ru="Удалить дебат">Delete debate</h2>
+        <button class="icon-btn" data-close-dialog data-en-aria="Close" data-ru-aria="Закрыть"><span data-icon="x"></span></button></div>
+      <div class="dialog__body">
+        <p data-en="Do you confirm you would like to delete this debate? This action is irreversible." data-ru="Вы подтверждаете удаление этого дебата? Действие необратимо.">Do you confirm you would like to delete this debate? This action is irreversible.</p>
+      </div>
+      <div class="dialog__footer">
+        <button class="btn btn--ghost" data-close-dialog data-en="Cancel" data-ru="Отмена">Cancel</button>
+        <button class="btn btn--danger" id="confirm-delete-debate" data-en="Delete debate" data-ru="Удалить дебат">Delete debate</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      var user = Agora.requireAuth(); if (!user) return;
+      var id = Agora.qs("id");
+      var editing = false, debate = null;
+      if (id) {
+        debate = Store.getDebate(id);
+        if (!debate) { location.replace("my-debates.html"); return; }
+        if (debate.authorUsername !== user.username) { location.replace("debate.html?id=" + encodeURIComponent(id)); return; }
+        editing = true;
+      }
+
+      var $ = function (x) { return document.getElementById(x); };
+      var pmode = $("f-pmode"), loc = $("f-loc");
+
+      function syncPmode() { $("limit-field").hidden = pmode.value !== "limited"; }
+      function syncLoc() {
+        $("geo-field").hidden = loc.value !== "geo";
+        $("vloc-block").hidden = loc.value !== "virtual";
+        if (loc.value === "virtual" && !$("vloc-rows").children.length) {
+          $("vloc-rows").innerHTML = Agora.virtualRow(); Agora.localize();
+        }
+      }
+      pmode.addEventListener("change", syncPmode);
+      loc.addEventListener("change", syncLoc);
+      $("add-vloc").addEventListener("click", function () {
+        $("vloc-rows").insertAdjacentHTML("beforeend", Agora.virtualRow()); Agora.localize();
+      });
+
+      if (editing) {
+        $("page-title").setAttribute("data-en", "Edit debate"); $("page-title").setAttribute("data-ru", "Редактировать дебат");
+        $("crumb").setAttribute("data-en", "Edit debate"); $("crumb").setAttribute("data-ru", "Редактировать дебат");
+        document.title = "Edit debate — Agora";
+        $("f-topic").value = debate.topic;
+        $("f-status").value = debate.status;
+        pmode.value = debate.participantsMode;
+        if (debate.participantsLimit) $("f-limit").value = debate.participantsLimit;
+        $("f-date").value = debate.dateTimeHeld || "";
+        $("f-publicity").value = debate.publicity;
+        loc.value = debate.locationType;
+        $("f-geo").value = debate.geoLocation || "";
+        if (debate.locationType === "virtual") {
+          $("vloc-rows").innerHTML = (debate.virtualPlatforms.length ? debate.virtualPlatforms : [null]).map(Agora.virtualRow).join("");
+        }
+        $("delete-btn").hidden = false;
+      }
+      syncPmode(); syncLoc();
+
+      $("debate-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var topic = $("f-topic").value.trim();
+        if (!topic) { Agora.setFieldError($("f-topic"), { en: "Please enter a topic", ru: "Введите тему" }); return; }
+        var data = {
+          topic: topic,
+          status: $("f-status").value,
+          participantsMode: pmode.value,
+          participantsLimit: pmode.value === "limited" ? parseInt($("f-limit").value, 10) || null : null,
+          dateTimeHeld: $("f-date").value,
+          publicity: $("f-publicity").value,
+          locationType: loc.value,
+          geoLocation: loc.value === "geo" ? $("f-geo").value.trim() : "",
+          virtualPlatforms: loc.value === "virtual" ? Agora.readVirtual($("vloc-rows")) : [],
+          description: $("f-desc").value.trim(),
+        };
+        var res = editing ? Store.updateDebate(id, data) : Store.createDebate(data);
+        Agora.toast(Agora.t(editing ? "Debate saved" : "Debate created", editing ? "Дебат сохранён" : "Дебат создан"), "success");
+        setTimeout(function () { location.href = "debate.html?id=" + encodeURIComponent(res.debate.id); }, 500);
+      });
+
+      $("confirm-delete-debate").addEventListener("click", function () {
+        Store.deleteDebate(id);
+        Agora.toast(Agora.t("Debate deleted", "Дебат удалён"));
+        setTimeout(function () { location.href = "my-debates.html"; }, 500);
+      });
+    };
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

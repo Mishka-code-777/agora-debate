@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Registration — Agora" data-ru="Регистрация — Agora">Registration — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main"><div class="container"><div class="auth-wrap">
+    <div class="card auth-card">
+      <h1 data-en="Registration" data-ru="Регистрация">Registration</h1>
+      <form id="register-form" novalidate>
+        <div class="field">
+          <label class="label" for="r-username" data-en="Username" data-ru="Имя пользователя">Username</label>
+          <input class="input" id="r-username" name="username" autocomplete="username" />
+          <p class="field-hint" data-en="A username can only contain letters, digits, underscore, dot and dash." data-ru="Имя может содержать только буквы, цифры, подчёркивание, точку и дефис.">A username can only contain letters, digits, underscore, dot and dash.</p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="r-password" data-en="Password" data-ru="Пароль">Password</label>
+          <div class="input-group">
+            <input class="input" id="r-password" name="password" type="password" autocomplete="new-password" />
+            <button type="button" class="input-group__btn" data-toggle-password="r-password" data-en-aria="Show password" data-ru-aria="Показать пароль"><span data-icon="eye"></span></button>
+          </div>
+          <p class="field-hint" data-en="A password should contain from 8 to 64 symbols." data-ru="Пароль должен содержать от 8 до 64 символов.">A password should contain from 8 to 64 symbols.</p>
+        </div>
+
+        <div class="notice notice--info" style="margin:var(--sp-4) 0">
+          <span data-icon="info"></span>
+          <span data-en="No personal data is required for registration. You may enter your contact information and create your own debate platform after registration. Please, remember your password, since password recovery is not currently available."
+                data-ru="Личные данные для регистрации не нужны. Контакты и собственную площадку для дебатов можно добавить после регистрации. Пожалуйста, запомните пароль — восстановление пароля сейчас недоступно.">
+            No personal data is required for registration. You may enter your contact information and create your own debate platform after registration. Please, remember your password, since password recovery is not currently available.
+          </span>
+        </div>
+
+        <div class="field">
+          <label class="captcha">
+            <input type="checkbox" id="r-captcha" />
+            <span class="box"></span>
+            <span data-en="I am not a robot" data-ru="Я не робот">I am not a robot</span>
+          </label>
+        </div>
+
+        <button class="btn btn--primary btn--block btn--lg" type="submit" data-en="Register" data-ru="Зарегистрироваться">Register</button>
+      </form>
+      <p class="auth-alt">
+        <span data-en="Do you already have a registered account?" data-ru="Уже есть аккаунт?">Do you already have a registered account?</span>
+        <a href="login.html" data-en="Log in" data-ru="Войти">Log in</a>
+      </p>
+    </div>
+  </div></div></main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      var form = document.getElementById("register-form");
+      var uname = document.getElementById("r-username");
+      var pass = document.getElementById("r-password");
+
+      uname.addEventListener("input", function () { Agora.clearFieldError(uname); });
+      pass.addEventListener("input", function () { Agora.clearFieldError(pass); });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        Agora.clearFieldError(uname); Agora.clearFieldError(pass);
+
+        var res = Store.register({ username: uname.value, password: pass.value });
+        if (!res.ok) {
+          if (res.field === "username") Agora.setFieldError(uname, res.error);
+          else Agora.setFieldError(pass, res.error);
+          return;
+        }
+        Agora.toast(Agora.t("Welcome to Agora, " + res.user.username + "!", "Добро пожаловать в Agora, " + res.user.username + "!"), "success");
+        setTimeout(function () { location.href = "profile.html"; }, 500);
+      });
+    };
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

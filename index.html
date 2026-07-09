@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="assets/css/base.css" />
   <link rel="stylesheet" href="assets/css/components.css" />
   <link rel="stylesheet" href="assets/css/pages.css" />
-  <script>window.AGORA = { auth: "guest", active: "" };</script>
+  <script>window.AGORA = { active: "" };</script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
@@ -82,44 +82,7 @@
         <h2 data-en="Recently opened" data-ru="Недавно открытые">Recently opened</h2>
         <a class="btn btn--link" href="debates.html" data-en="View all debates →" data-ru="Все дебаты →">View all debates →</a>
       </div>
-      <div class="list">
-        <a class="debate-card" href="debate.html">
-          <div class="debate-card__top">
-            <span class="badge status-looking" data-en="Looking for participants" data-ru="Ищем участников">Looking for participants</span>
-            <span class="badge badge--secondary badge--no-dot" data-en="Online" data-ru="Онлайн">Online</span>
-          </div>
-          <span class="debate-card__title">Should AI-generated art be eligible for traditional art prizes?</span>
-          <div class="debate-card__meta">
-            <span data-icon="user"><span data-en="by maria_v" data-ru="от maria_v">by maria_v</span></span>
-            <span data-icon="users"><span data-en="4 of 6 joined" data-ru="4 из 6 участников">4 of 6 joined</span></span>
-            <span data-icon="calendar"><span data-en="Opened 2 days ago" data-ru="Открыт 2 дня назад">Opened 2 days ago</span></span>
-          </div>
-        </a>
-        <a class="debate-card" href="debate.html">
-          <div class="debate-card__top">
-            <span class="badge status-awaiting" data-en="Awaiting" data-ru="Ожидание">Awaiting</span>
-            <span class="badge badge--secondary badge--no-dot" data-en="In person · Berlin" data-ru="Очно · Берлин">In person · Berlin</span>
-          </div>
-          <span class="debate-card__title">Is a four-day work week realistic for small businesses?</span>
-          <div class="debate-card__meta">
-            <span data-icon="user"><span data-en="by t.hoffmann" data-ru="от t.hoffmann">by t.hoffmann</span></span>
-            <span data-icon="users"><span data-en="Undetermined size" data-ru="Размер не задан">Undetermined size</span></span>
-            <span data-icon="calendar"><span data-en="Held 18 Jul, 19:00" data-ru="18 июля, 19:00">Held 18 Jul, 19:00</span></span>
-          </div>
-        </a>
-        <a class="debate-card" href="debate.html">
-          <div class="debate-card__top">
-            <span class="badge status-ongoing" data-en="Ongoing" data-ru="Идёт сейчас">Ongoing</span>
-            <span class="badge badge--secondary badge--no-dot" data-en="Online" data-ru="Онлайн">Online</span>
-          </div>
-          <span class="debate-card__title">Open-source vs. proprietary software in public institutions</span>
-          <div class="debate-card__meta">
-            <span data-icon="user"><span data-en="by devon.k" data-ru="от devon.k">by devon.k</span></span>
-            <span data-icon="users"><span data-en="8 of 8 joined" data-ru="8 из 8 участников">8 of 8 joined</span></span>
-            <span data-icon="calendar"><span data-en="Started 40 min ago" data-ru="Началось 40 мин назад">Started 40 min ago</span></span>
-          </div>
-        </a>
-      </div>
+      <div class="list" id="featured-list"></div>
     </section>
 
     <!-- CTA band -->
@@ -136,6 +99,13 @@
   </main>
 
   <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      document.getElementById("featured-list").innerHTML =
+        Store.getDebates({ limit: 3 }).map(Agora.debateCardHTML).join("");
+    };
+  </script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>

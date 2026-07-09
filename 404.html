@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Page not found — Agora" data-ru="Страница не найдена — Agora">Page not found — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container">
+    <div class="centered">
+      <div class="error-code">404</div>
+      <h1 data-en="Page not found" data-ru="Страница не найдена">Page not found</h1>
+      <p data-en="The page you are looking for doesn't exist or has moved."
+         data-ru="Страница не существует или была перемещена.">The page you are looking for doesn't exist or has moved.</p>
+      <div class="cluster" style="justify-content:center">
+        <a class="btn btn--primary" href="index.html"><span data-icon="arrowLeft"></span><span data-en="Go to home" data-ru="На главную">Go to home</span></a>
+        <a class="btn btn--ghost" href="debates.html"><span data-icon="grid"></span><span data-en="Browse debates" data-ru="Смотреть дебаты">Browse debates</span></a>
+      </div>
+    </div>
+  </div></main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {};
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

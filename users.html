@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Users — Agora" data-ru="Пользователи — Agora">Users — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "users" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container">
+    <div class="list-head">
+      <div>
+        <h1 data-en="Users" data-ru="Пользователи">Users</h1>
+        <p class="list-count" id="user-count"></p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search">
+        <span data-icon="search"></span>
+        <input class="input" id="user-search" type="search" data-en-ph="Search users by name…" data-ru-ph="Поиск по имени…" />
+      </div>
+
+      <div class="dropdown">
+        <button class="btn btn--ghost sort-btn" id="sort" data-dropdown-toggle aria-expanded="false">
+          <span data-icon="sort"></span>
+          <span id="sort-label" data-en="Name — A to Z" data-ru="Имя — А→Я">Name — A to Z</span>
+          <span data-icon="chevron"></span>
+        </button>
+        <div class="dropdown__menu" hidden role="listbox">
+          <div class="dropdown__label" data-en="Sort by" data-ru="Сортировка">Sort by</div>
+          <button class="dropdown__item" data-sort="az" aria-checked="true"><span data-en="Name — A to Z" data-ru="Имя — А→Я">Name — A to Z</span></button>
+          <button class="dropdown__item" data-sort="za"><span data-en="Name — Z to A" data-ru="Имя — Я→А">Name — Z to A</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="list" id="user-list"></div>
+  </div></main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      var state = { query: "", sort: "az" };
+
+      function emptyState() {
+        return (
+          '<div class="empty-state"><span data-icon="users"></span>' +
+          '<h3 data-en="No users found" data-ru="Никого не найдено">No users found</h3>' +
+          '<p data-en="Try changing your search." data-ru="Попробуйте изменить запрос.">Try changing your search.</p></div>'
+        );
+      }
+
+      function render() {
+        var list = Store.getUsers(state);
+        var wrap = document.getElementById("user-list");
+        wrap.innerHTML = list.length ? list.map(Agora.userCardHTML).join("") : emptyState();
+        var c = document.getElementById("user-count");
+        c.setAttribute("data-en", "Showing " + list.length + (list.length === 1 ? " user" : " users"));
+        c.setAttribute("data-ru", "Показано: " + list.length);
+        Agora.localize();
+      }
+
+      // Search
+      document.getElementById("user-search").addEventListener("input", function (e) {
+        state.query = e.target.value; render();
+      });
+
+      // Sort
+      document.querySelectorAll("[data-sort]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          state.sort = b.getAttribute("data-sort");
+          document.querySelectorAll("[data-sort]").forEach(function (x) { x.setAttribute("aria-checked", String(x === b)); });
+          var lbl = document.getElementById("sort-label");
+          var span = b.querySelector("span");
+          lbl.setAttribute("data-en", span.getAttribute("data-en"));
+          lbl.setAttribute("data-ru", span.getAttribute("data-ru"));
+          var menu = b.closest(".dropdown__menu"); if (menu) menu.hidden = true;
+          render();
+        });
+      });
+
+      render();
+    };
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Notifications — Agora" data-ru="Уведомления — Agora">Notifications — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container">
+    <div class="page-head">
+      <h1 data-en="Notifications" data-ru="Уведомления">Notifications</h1>
+    </div>
+    <div id="notif-root"></div>
+  </div></main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      var user = Agora.requireAuth(); if (!user) return;
+
+      function relTime(ts) {
+        var diff = Date.now() - ts, m = 60000, h = 3600000, day = 86400000;
+        if (diff < m) return { en: "Just now", ru: "Только что" };
+        if (diff < h) { var mm = Math.round(diff / m); return { en: mm + (mm === 1 ? " minute ago" : " minutes ago"), ru: mm + " мин назад" }; }
+        if (diff < day) { var hh = Math.round(diff / h); return { en: hh + (hh === 1 ? " hour ago" : " hours ago"), ru: hh + " ч назад" }; }
+        var dd = Math.round(diff / day);
+        if (dd < 7) return { en: dd + (dd === 1 ? " day ago" : " days ago"), ru: dd + " дн назад" };
+        var w = Math.round(dd / 7);
+        return { en: w + (w === 1 ? " week ago" : " weeks ago"), ru: w + " нед назад" };
+      }
+
+      function emptyState() {
+        return (
+          '<div class="empty-state"><span data-icon="inbox"></span>' +
+          '<h3 data-en="No notifications yet" data-ru="Пока нет уведомлений">No notifications yet</h3>' +
+          '<p data-en="When something happens with your debates, you\'ll see it here." data-ru="Когда что-то произойдёт с вашими дебатами, вы увидите это здесь.">When something happens with your debates, you\'ll see it here.</p></div>'
+        );
+      }
+
+      function itemHTML(n) {
+        var rt = relTime(n.createdAt);
+        return (
+          '<li class="notif-item' + (n.read ? "" : " notif-item--unread") + '">' +
+            '<span data-icon="bell"></span>' +
+            '<div class="notif-item__body">' +
+              '<span>' + Agora.esc(n.text) + '</span>' +
+              '<div class="notif-item__time" data-en="' + Agora.esc(rt.en) + '" data-ru="' + Agora.esc(rt.ru) + '">' + Agora.esc(rt.en) + '</div>' +
+            '</div>' +
+          '</li>'
+        );
+      }
+
+      var items = Store.getNotifications(user.username);
+      var root = document.getElementById("notif-root");
+      if (!items.length) {
+        root.innerHTML = emptyState();
+      } else {
+        root.innerHTML = '<ul class="notif-list">' + items.map(itemHTML).join("") + '</ul>';
+      }
+
+      Agora.localize();
+      Store.markNotificationsRead(user.username);
+    };
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

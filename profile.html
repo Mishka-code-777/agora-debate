@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Profile settings — Agora" data-ru="Настройки профиля — Agora">Profile settings — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru") l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement; r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { active: "" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container">
+    <div class="list-head">
+      <div class="page-head" style="margin:0"><h1 data-en="Profile settings" data-ru="Настройки профиля">Profile settings</h1></div>
+      <a class="btn btn--ghost" href="my-debates.html"><span data-icon="grid"></span><span data-en="My debates" data-ru="Мои дебаты">My debates</span></a>
+    </div>
+
+    <div class="settings">
+      <!-- Profile information -->
+      <section class="card settings-section">
+        <div class="card__header"><h2 data-en="Profile information" data-ru="Информация профиля">Profile information</h2></div>
+        <div class="card__body stack">
+          <div class="settings-row">
+            <div>
+              <div class="settings-row__label" data-en="Username" data-ru="Имя пользователя">Username</div>
+              <div class="settings-row__value" id="username-val">—</div>
+            </div>
+            <button class="btn btn--ghost btn--sm" id="btn-change-username"><span data-icon="edit"></span><span data-en="Change username" data-ru="Сменить имя">Change username</span></button>
+          </div>
+          <div class="inline-form" id="username-form" hidden>
+            <div class="field">
+              <label class="label" for="new-username" data-en="New username" data-ru="Новое имя">New username</label>
+              <input class="input" id="new-username" />
+            </div>
+            <div class="form-actions">
+              <button class="btn btn--primary btn--sm" id="save-username" data-en="Save" data-ru="Сохранить">Save</button>
+              <button class="btn btn--ghost btn--sm" id="cancel-username" data-en="Cancel" data-ru="Отмена">Cancel</button>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="field">
+            <label class="label" for="p-desc"><span data-en="Description" data-ru="Описание">Description</span> <span class="optional" data-en="(optional)" data-ru="(необязательно)">(optional)</span></label>
+            <textarea class="textarea" id="p-desc" data-en-ph="Tell others what you like to debate about…" data-ru-ph="Расскажите, о чём любите спорить…"></textarea>
+            <div class="form-actions"><button class="btn btn--primary btn--sm" id="save-desc" data-en="Save description" data-ru="Сохранить описание">Save description</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact information -->
+      <section class="card settings-section">
+        <div class="card__header"><h2 data-en="Contact information" data-ru="Контактная информация">Contact information</h2></div>
+        <div class="card__body stack">
+          <div class="notice">
+            <span data-icon="info"></span>
+            <span data-en="All of the contact information you provide is considered public, disregarding whether it is hidden or not. This website does not take responsibility in regards to what public contact information you provide and what consequences it may lead to. You are the only responsible for the public contact information you provide."
+                  data-ru="Вся указанная контактная информация считается публичной, независимо от того, скрыта она или нет. Сайт не несёт ответственности за то, какие публичные контакты вы указываете и к каким последствиям это приведёт. Вы единолично отвечаете за публичные контакты, которые указываете.">
+              All of the contact information you provide is considered public, disregarding whether it is hidden or not. This website does not take responsibility in regards to what public contact information you provide and what consequences it may lead to. You are the only responsible for the public contact information you provide.
+            </span>
+          </div>
+          <div class="widget-row__grid">
+            <div class="field">
+              <label class="label" for="p-email"><span data-en="E-mail" data-ru="E-mail">E-mail</span> <span class="optional" data-en="(optional)" data-ru="(необязательно)">(optional)</span></label>
+              <input class="input" id="p-email" type="email" data-en-ph="you@example.com" data-ru-ph="you@example.com" />
+            </div>
+            <div class="field">
+              <label class="label" for="p-phone"><span data-en="Phone number" data-ru="Телефон">Phone number</span> <span class="optional" data-en="(optional)" data-ru="(необязательно)">(optional)</span></label>
+              <input class="input" id="p-phone" type="tel" data-en-ph="+…" data-ru-ph="+…" />
+            </div>
+          </div>
+
+          <div>
+            <label class="label" data-en="Other contacts" data-ru="Другие контакты">Other contacts</label>
+            <div class="widget-rows" id="contact-rows"></div>
+            <button type="button" class="btn btn--ghost btn--sm" id="add-contact" style="margin-top:var(--sp-3)"><span data-icon="plus"></span><span data-en="Add new contact" data-ru="Добавить контакт">Add new contact</span></button>
+          </div>
+
+          <div class="form-actions"><button class="btn btn--primary btn--sm" id="save-contacts" data-en="Save contacts" data-ru="Сохранить контакты">Save contacts</button></div>
+        </div>
+      </section>
+
+      <!-- Security -->
+      <section class="card settings-section danger-zone">
+        <div class="card__header"><h2 data-en="Security" data-ru="Безопасность">Security</h2></div>
+        <div class="card__body stack">
+          <div class="settings-row">
+            <div class="settings-row__label" data-en="Password" data-ru="Пароль">Password</div>
+            <button class="btn btn--ghost btn--sm" id="btn-change-password"><span data-icon="lock"></span><span data-en="Change password" data-ru="Сменить пароль">Change password</span></button>
+          </div>
+          <div class="inline-form" id="password-form" hidden>
+            <div class="field">
+              <label class="label" for="cur-password" data-en="Current password" data-ru="Текущий пароль">Current password</label>
+              <input class="input" id="cur-password" type="password" autocomplete="current-password" />
+            </div>
+            <div class="field">
+              <label class="label" for="new-password" data-en="New password" data-ru="Новый пароль">New password</label>
+              <input class="input" id="new-password" type="password" autocomplete="new-password" />
+              <p class="field-hint" data-en="A password should contain from 8 to 64 symbols." data-ru="Пароль должен содержать от 8 до 64 символов.">A password should contain from 8 to 64 symbols.</p>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn--primary btn--sm" id="save-password" data-en="Save" data-ru="Сохранить">Save</button>
+              <button class="btn btn--ghost btn--sm" id="cancel-password" data-en="Cancel" data-ru="Отмена">Cancel</button>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="settings-row">
+            <div>
+              <div class="settings-row__label" data-en="Delete my account" data-ru="Удалить аккаунт">Delete my account</div>
+              <div class="settings-row__value text-sm" data-en="Permanently remove your account and all associated data." data-ru="Безвозвратно удалить аккаунт и все связанные данные.">Permanently remove your account and all associated data.</div>
+            </div>
+            <button class="btn btn--danger" data-open-dialog="delete-account-dialog"><span data-icon="trash"></span><span data-en="Delete my account" data-ru="Удалить аккаунт">Delete my account</span></button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div></main>
+
+  <!-- Delete account confirmation dialog -->
+  <div class="dialog-backdrop" id="delete-account-dialog" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dad-title">
+      <div class="dialog__header"><h2 id="dad-title">—</h2>
+        <button class="icon-btn" data-close-dialog data-en-aria="Close" data-ru-aria="Закрыть"><span data-icon="x"></span></button></div>
+      <div class="dialog__body stack">
+        <div class="notice notice--danger">
+          <span data-icon="alert"></span>
+          <span data-en="Deleting your account is an irreversible action. You will not be able to restore your account. All information that you provided by using this account is supposed to be deleted immediately and is not supposed to be retained. Proceed with caution. Both we and you WILL NOT be able to recover your account or any data associated with it. If you'd like to delete your account, please enter your password."
+                data-ru="Удаление аккаунта — необратимое действие. Восстановить аккаунт не получится. Вся информация, указанная через этот аккаунт, будет удалена немедленно и не сохраняется. Действуйте осторожно. Ни мы, ни вы НЕ сможем восстановить аккаунт или связанные с ним данные. Чтобы удалить аккаунт, введите пароль.">
+            Deleting your account is an irreversible action…
+          </span>
+        </div>
+        <div class="field">
+          <label class="label" for="del-password" data-en="Password" data-ru="Пароль">Password</label>
+          <input class="input" id="del-password" type="password" />
+        </div>
+        <div class="field">
+          <label class="captcha"><input type="checkbox" id="del-captcha" /><span class="box"></span><span data-en="I am not a robot" data-ru="Я не робот">I am not a robot</span></label>
+        </div>
+      </div>
+      <div class="dialog__footer">
+        <button class="btn btn--ghost" data-close-dialog data-en="Cancel" data-ru="Отмена">Cancel</button>
+        <button class="btn btn--danger" id="confirm-delete-account" data-en="Delete my account" data-ru="Удалить аккаунт">Delete my account</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/store.js"></script>
+  <script>
+    window.agoraPage = function () {
+      var user = Agora.requireAuth(); if (!user) return;
+      var $ = function (x) { return document.getElementById(x); };
+
+      function fill() {
+        user = Store.currentUser();
+        $("username-val").textContent = user.username;
+        $("p-desc").value = user.description || "";
+        $("p-email").value = user.email || "";
+        $("p-phone").value = user.phone || "";
+        $("contact-rows").innerHTML = (user.contacts.length ? user.contacts : []).map(Agora.contactRow).join("");
+        $("dad-title").setAttribute("data-en", "Delete my account: " + user.username);
+        $("dad-title").setAttribute("data-ru", "Удалить аккаунт: " + user.username);
+        $("dad-title").textContent = Agora.t("Delete my account: " + user.username, "Удалить аккаунт: " + user.username);
+      }
+      fill();
+
+      // Change username
+      $("btn-change-username").addEventListener("click", function () {
+        $("username-form").hidden = false; $("new-username").value = user.username; $("new-username").focus();
+      });
+      $("cancel-username").addEventListener("click", function () { $("username-form").hidden = true; Agora.clearFieldError($("new-username")); });
+      $("save-username").addEventListener("click", function () {
+        Agora.clearFieldError($("new-username"));
+        var res = Store.changeUsername($("new-username").value);
+        if (!res.ok) { Agora.setFieldError($("new-username"), res.error); return; }
+        Agora.toast(Agora.t("Username updated", "Имя обновлено"), "success");
+        $("username-form").hidden = true;
+        // reload so the header reflects the new name
+        setTimeout(function () { location.reload(); }, 500);
+      });
+
+      // Description
+      $("save-desc").addEventListener("click", function () {
+        Store.updateProfile({ description: $("p-desc").value.trim() });
+        Agora.toast(Agora.t("Description saved", "Описание сохранено"), "success");
+      });
+
+      // Contacts
+      $("add-contact").addEventListener("click", function () {
+        $("contact-rows").insertAdjacentHTML("beforeend", Agora.contactRow()); Agora.localize();
+      });
+      $("save-contacts").addEventListener("click", function () {
+        Store.updateProfile({
+          email: $("p-email").value.trim(),
+          phone: $("p-phone").value.trim(),
+          contacts: Agora.readContacts($("contact-rows")),
+        });
+        Agora.toast(Agora.t("Contacts saved", "Контакты сохранены"), "success");
+        fill();
+      });
+
+      // Change password
+      $("btn-change-password").addEventListener("click", function () { $("password-form").hidden = false; $("cur-password").focus(); });
+      $("cancel-password").addEventListener("click", function () {
+        $("password-form").hidden = true; $("cur-password").value = ""; $("new-password").value = "";
+        Agora.clearFieldError($("cur-password")); Agora.clearFieldError($("new-password"));
+      });
+      $("save-password").addEventListener("click", function () {
+        Agora.clearFieldError($("cur-password")); Agora.clearFieldError($("new-password"));
+        var res = Store.changePassword($("cur-password").value, $("new-password").value);
+        if (!res.ok) {
+          if (res.field === "current") Agora.setFieldError($("cur-password"), res.error);
+          else Agora.setFieldError($("new-password"), res.error);
+          return;
+        }
+        Agora.toast(Agora.t("Password changed", "Пароль изменён"), "success");
+        $("password-form").hidden = true; $("cur-password").value = ""; $("new-password").value = "";
+      });
+
+      // Delete account
+      $("confirm-delete-account").addEventListener("click", function () {
+        var res = Store.deleteAccount($("del-password").value);
+        if (!res.ok) { Agora.setFieldError($("del-password"), res.error); return; }
+        location.href = "account-deleted.html?u=" + encodeURIComponent(res.username);
+      });
+    };
+  </script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -144,3 +144,129 @@
 @media (max-width: 860px) {
   .detail-grid { grid-template-columns: 1fr; }
 }
+
+/* ---------------------- Password input with toggle ---------------------- */
+.input-group { position: relative; }
+.input-group .input { padding-right: 2.8rem; }
+.input-group__btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px; height: 34px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 0; background: transparent; cursor: pointer;
+  color: var(--text-subtle); border-radius: var(--radius-xs);
+}
+.input-group__btn:hover { color: var(--text); background: var(--surface-2); }
+
+.form-actions {
+  display: flex; gap: var(--sp-3); flex-wrap: wrap;
+  margin-top: var(--sp-5);
+}
+.form-actions--end { justify-content: flex-end; }
+
+/* ---------------------- Settings / profile ---------------------- */
+.settings { display: grid; gap: var(--sp-5); max-width: 720px; }
+.settings-section .card__header h2,
+.settings-section .card__header h3 { font-size: var(--fs-lg); }
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-4); flex-wrap: wrap;
+}
+.settings-row__label { font-weight: var(--fw-semibold); }
+.settings-row__value { color: var(--text-muted); }
+
+/* Inline reveal form (change username / password) */
+.inline-form {
+  margin-top: var(--sp-4);
+  padding: var(--sp-4);
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+.inline-form[hidden] { display: none; }
+
+/* Contact / virtual-location display lists */
+.contact-list { display: grid; gap: var(--sp-2); }
+.contact-item {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.contact-item .icon { color: var(--text-muted); flex: none; }
+.contact-item__platform { font-weight: var(--fw-semibold); font-size: var(--fs-sm); }
+.contact-item__id { color: var(--text-muted); font-size: var(--fs-sm); }
+.contact-item__desc { color: var(--text-subtle); font-size: var(--fs-xs); }
+.contact-item__body { min-width: 0; flex: 1; }
+
+/* Danger zone */
+.danger-zone {
+  border-color: var(--danger);
+}
+.danger-zone .card__header { border-bottom-color: color-mix(in srgb, var(--danger) 30%, var(--border)); }
+
+/* ---------------------- Report options ---------------------- */
+.report-options { display: grid; gap: var(--sp-1); }
+.report-options .choice { padding: var(--sp-3); border: var(--border-w) solid var(--border); border-radius: var(--radius-sm); }
+.report-options .choice:hover { background: var(--surface-2); }
+
+/* ---------------------- Tabs (my debates) ---------------------- */
+.tabs {
+  display: flex; gap: var(--sp-1);
+  border-bottom: var(--border-w) solid var(--border);
+  margin-bottom: var(--sp-5);
+  overflow-x: auto;
+}
+.tab {
+  border: 0; background: transparent; cursor: pointer;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm); font-weight: var(--fw-semibold);
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--text); }
+.tab[aria-selected="true"] { color: var(--primary-soft-text); border-bottom-color: var(--primary); }
+.tabpanel[hidden] { display: none; }
+
+/* ---------------------- Notifications ---------------------- */
+.notif-list { display: grid; gap: var(--sp-2); max-width: 720px; }
+.notif-item {
+  display: flex; gap: var(--sp-3); align-items: flex-start;
+  padding: var(--sp-4);
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.notif-item--unread { border-left: 3px solid var(--accent); background: var(--surface-2); }
+.notif-item .icon { color: var(--accent); flex: none; margin-top: 2px; }
+.notif-item__time { color: var(--text-subtle); font-size: var(--fs-xs); margin-top: var(--sp-1); }
+
+/* ---------------------- Detail page ---------------------- */
+.detail-head { margin-bottom: var(--sp-5); }
+.detail-head h1 { margin-bottom: var(--sp-3); }
+.kv { display: grid; gap: var(--sp-3); }
+.kv__row { display: grid; grid-template-columns: 150px 1fr; gap: var(--sp-3); }
+.kv__k { color: var(--text-muted); font-size: var(--fs-sm); }
+.kv__v { font-size: var(--fs-sm); }
+@media (max-width: 520px) { .kv__row { grid-template-columns: 1fr; gap: var(--sp-1); } }
+
+.side-card { position: sticky; top: calc(var(--header-h) + var(--sp-4)); }
+
+/* ---------------------- Centered pages (deleted / 404) ---------------------- */
+.centered {
+  max-width: 520px; margin-inline: auto; text-align: center;
+  padding-block: var(--sp-9);
+}
+.centered .big-icon {
+  width: 64px; height: 64px; margin: 0 auto var(--sp-5);
+  display: grid; place-items: center; border-radius: 50%;
+  background: var(--surface-2); color: var(--accent);
+}
+.centered .big-icon .icon { width: 30px; height: 30px; }
+.centered h1 { margin-bottom: var(--sp-3); }
+.centered p { color: var(--text-muted); margin-bottom: var(--sp-5); }
+.error-code { font-size: 4rem; font-weight: var(--fw-bold); color: var(--primary); line-height: 1; }

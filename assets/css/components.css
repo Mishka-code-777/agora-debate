@@ -734,6 +734,46 @@
 }
 .site-footer a { color: var(--text-muted); }
 .site-footer a:hover { color: var(--text); }
+.site-footer__proto {
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: var(--border-w) solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+/* User card chevron */
+.user-card__chevron { color: var(--text-subtle); margin-left: auto; flex: none; }
+
+/* Toasts */
+.toast-wrap {
+  position: fixed;
+  left: 50%;
+  bottom: var(--sp-5);
+  transform: translateX(-50%);
+  display: grid;
+  gap: var(--sp-2);
+  z-index: 300;
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--sp-4));
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-sm);
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+.toast .icon { flex: none; }
+.toast--success { background: var(--success); color: #fff; }
+.toast--danger { background: var(--danger); color: #fff; }
 
 /* --------------------------------------------------------------------------
    Page header block
