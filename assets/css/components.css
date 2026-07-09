@@ -229,12 +229,14 @@
   color: var(--text-muted);
   font-size: var(--fs-sm);
 }
-.captcha .box {
+.captcha input[type="checkbox"] {
   width: 22px; height: 22px;
-  border: 2px solid var(--border-strong);
-  border-radius: var(--radius-xs);
+  accent-color: var(--accent);
   flex: none;
+  cursor: pointer;
 }
+/* Decorative box is redundant next to the real checkbox — hide it */
+.captcha .box { display: none; }
 
 /* --------------------------------------------------------------------------
    Cards / panels
