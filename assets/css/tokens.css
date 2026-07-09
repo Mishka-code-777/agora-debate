@@ -1,0 +1,198 @@
+/* ==========================================================================
+   Agora — Design tokens
+   Two themes (light / dark). Components reference ONLY semantic variables
+   below, never the raw brand hexes. Switch theme via <html data-theme="dark">.
+   Brand palette (from spec):
+     #659692 sage-teal · #807772 taupe · #3A424F slate
+     #2B3E60 navy      · #8382A0 lavender
+   ========================================================================== */
+
+:root {
+  /* ---- Type ---- */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-display: "Inter", var(--font-sans);
+
+  /* Modular type scale (1.200) */
+  --fs-2xs: 0.694rem;
+  --fs-xs: 0.833rem;
+  --fs-sm: 0.9rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.2rem;
+  --fs-xl: 1.44rem;
+  --fs-2xl: 1.728rem;
+  --fs-3xl: 2.074rem;
+  --fs-4xl: 2.488rem;
+
+  --lh-tight: 1.2;
+  --lh-snug: 1.4;
+  --lh-normal: 1.6;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ---- Spacing (4px base) ---- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+
+  /* ---- Radius ---- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* ---- Layout ---- */
+  --container-max: 1160px;
+  --container-narrow: 560px;
+  --header-h: 64px;
+  --border-w: 1px;
+
+  /* ---- Motion (kept minimal: static design, no decorative animation) ---- */
+  --focus-ring-w: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   LIGHT THEME (default)
+   -------------------------------------------------------------------------- */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Surfaces */
+  --bg: #f3f5f5;
+  --bg-subtle: #e9eded;
+  --surface: #ffffff;
+  --surface-2: #f7f8f8;
+  --surface-inset: #eef1f1;
+
+  /* Borders / lines */
+  --border: #dfe4e4;
+  --border-strong: #c7cfcf;
+
+  /* Text */
+  --text: #2c333c;
+  --text-muted: #63615d;
+  --text-subtle: #8a857f;
+  --text-on-brand: #ffffff;
+
+  /* Brand roles */
+  --primary: #2b3e60;        /* navy — primary actions */
+  --primary-hover: #223251;
+  --primary-active: #1b2942;
+  --primary-soft: #e5eaf1;   /* tinted surface */
+  --primary-soft-text: #2b3e60;
+
+  --accent: #4f7f7b;         /* teal (darkened for AA on white) */
+  --accent-hover: #43706c;
+  --accent-soft: #e4efee;
+  --accent-soft-text: #3c605d;
+
+  --secondary: #6f6e8c;      /* lavender (darkened for AA) */
+  --secondary-soft: #ecebf1;
+  --secondary-soft-text: #56556f;
+
+  --neutral: #807772;        /* taupe */
+  --neutral-soft: #edeae8;
+  --neutral-soft-text: #63615d;
+
+  /* Semantic */
+  --danger: #b24438;
+  --danger-hover: #9a3a30;
+  --danger-soft: #f7e6e3;
+  --danger-soft-text: #8f342a;
+
+  --success: #3f7d59;
+  --success-soft: #e3efe8;
+  --success-soft-text: #2f6446;
+
+  --warning: #9a6f2b;
+  --warning-soft: #f5ecdb;
+  --warning-soft-text: #7c591f;
+
+  --info: #2f6ea6;
+  --info-soft: #e4eef6;
+  --info-soft-text: #275c8b;
+
+  /* Focus + shadow */
+  --focus-ring: rgba(79, 127, 123, 0.55);
+  --shadow-sm: 0 1px 2px rgba(43, 62, 96, 0.06),
+    0 1px 3px rgba(43, 62, 96, 0.08);
+  --shadow-md: 0 4px 10px rgba(43, 62, 96, 0.08),
+    0 2px 4px rgba(43, 62, 96, 0.06);
+  --shadow-lg: 0 12px 28px rgba(43, 62, 96, 0.14),
+    0 6px 12px rgba(43, 62, 96, 0.08);
+  --overlay: rgba(28, 33, 41, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   DARK THEME
+   -------------------------------------------------------------------------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #1e232b;
+  --bg-subtle: #262c35;
+  --surface: #2a313b;
+  --surface-2: #333b47;
+  --surface-inset: #232a33;
+
+  --border: #3c4552;
+  --border-strong: #4d5866;
+
+  --text: #edeff2;
+  --text-muted: #aeb4be;
+  --text-subtle: #838a95;
+  --text-on-brand: #ffffff;
+
+  --primary: #5a79a6;
+  --primary-hover: #6c88b1;
+  --primary-active: #4d6b97;
+  --primary-soft: #2c384c;
+  --primary-soft-text: #b9cbe4;
+
+  --accent: #7db0ab;
+  --accent-hover: #8ebeb9;
+  --accent-soft: #2c3b39;
+  --accent-soft-text: #b6d6d2;
+
+  --secondary: #9e9cc0;
+  --secondary-soft: #34333f;
+  --secondary-soft-text: #c8c6dd;
+
+  --neutral: #9a918b;
+  --neutral-soft: #333a44;
+  --neutral-soft-text: #c3bcb6;
+
+  --danger: #d46a5e;
+  --danger-hover: #dd7d72;
+  --danger-soft: #3d2b29;
+  --danger-soft-text: #eaa79f;
+
+  --success: #6fa47b;
+  --success-soft: #29352d;
+  --success-soft-text: #a9cdb4;
+
+  --warning: #d6a863;
+  --warning-soft: #38301f;
+  --warning-soft-text: #e6c793;
+
+  --info: #6ea3d1;
+  --info-soft: #263442;
+  --info-soft-text: #a9cbe8;
+
+  --focus-ring: rgba(125, 176, 171, 0.6);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 14px 30px rgba(0, 0, 0, 0.5), 0 6px 12px rgba(0, 0, 0, 0.4);
+  --overlay: rgba(0, 0, 0, 0.62);
+}

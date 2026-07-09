@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Agora — Find your next debate" data-ru="Agora — найдите свой следующий дебат">Agora — Find your next debate</title>
+  <meta name="description" content="Agora — a platform to create, discover and join debates." />
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark")
+        t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru")
+        l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement;
+      r.setAttribute("data-theme", t);
+      r.setAttribute("data-lang", l);
+      r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&subset=cyrillic,latin" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { auth: "guest", active: "" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <p class="eyebrow" data-en="Open debate platform" data-ru="Открытая площадка для дебатов">Open debate platform</p>
+        <h1 class="hero__title" data-en="Where ideas meet, on your terms." data-ru="Место, где идеи встречаются на ваших условиях.">Where ideas meet, on your terms.</h1>
+        <p class="hero__lead" data-en="Agora is a place to organise and join debates — in person or online. No personal data required to start. Create your topic, pick a format, and find people who want to talk it through."
+           data-ru="Agora — место, где можно организовать дебаты и присоединиться к ним — очно или онлайн. Личные данные для старта не нужны. Создайте тему, выберите формат и найдите тех, кто готов её обсудить.">
+          Agora is a place to organise and join debates — in person or online. No personal data required to start. Create your topic, pick a format, and find people who want to talk it through.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="debates.html" data-en="Browse debates" data-ru="Смотреть дебаты">Browse debates</a>
+          <a class="btn btn--ghost btn--lg" href="register.html" data-en="Create an account" data-ru="Создать аккаунт">Create an account</a>
+        </div>
+        <p class="hero__note text-sm subtle" data-en="Free · No email required · Your contacts stay yours"
+           data-ru="Бесплатно · Без e-mail · Ваши контакты остаются вашими">Free · No email required · Your contacts stay yours</p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="container section">
+      <h2 class="text-center" style="margin-bottom:var(--sp-6)" data-en="How Agora works" data-ru="Как работает Agora">How Agora works</h2>
+      <div class="grid how-grid">
+        <div class="how-step card"><div class="card__body">
+          <span class="how-step__num">1</span>
+          <h3 data-en="Create a debate" data-ru="Создайте дебат">Create a debate</h3>
+          <p class="muted" data-en="Set a topic, choose a location — a physical place or a virtual platform — and decide how many can join."
+             data-ru="Задайте тему, выберите место — физическое или виртуальную площадку — и решите, сколько человек может участвовать.">Set a topic, choose a location — a physical place or a virtual platform — and decide how many can join.</p>
+        </div></div>
+        <div class="how-step card"><div class="card__body">
+          <span class="how-step__num">2</span>
+          <h3 data-en="Find participants" data-ru="Найдите участников">Find participants</h3>
+          <p class="muted" data-en="Your debate appears in the public list. People browse, filter by topic author or status, and join the ones they like."
+             data-ru="Ваш дебат появляется в публичном списке. Люди листают, фильтруют по автору или статусу и присоединяются к тем, что им интересны.">Your debate appears in the public list. People browse, filter by topic author or status, and join the ones they like.</p>
+        </div></div>
+        <div class="how-step card"><div class="card__body">
+          <span class="how-step__num">3</span>
+          <h3 data-en="Debate anywhere" data-ru="Дебатируйте где угодно">Debate anywhere</h3>
+          <p class="muted" data-en="Share contacts on your terms — public or hidden. Meet up or connect through Telegram, Discord, Signal and more."
+             data-ru="Делитесь контактами как хотите — публично или скрыто. Встречайтесь лично или связывайтесь через Telegram, Discord, Signal и другие.">Share contacts on your terms — public or hidden. Meet up or connect through Telegram, Discord, Signal and more.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- Featured debates preview -->
+    <section class="container section">
+      <div class="cluster" style="justify-content:space-between;margin-bottom:var(--sp-5)">
+        <h2 data-en="Recently opened" data-ru="Недавно открытые">Recently opened</h2>
+        <a class="btn btn--link" href="debates.html" data-en="View all debates →" data-ru="Все дебаты →">View all debates →</a>
+      </div>
+      <div class="list">
+        <a class="debate-card" href="debate.html">
+          <div class="debate-card__top">
+            <span class="badge status-looking" data-en="Looking for participants" data-ru="Ищем участников">Looking for participants</span>
+            <span class="badge badge--secondary badge--no-dot" data-en="Online" data-ru="Онлайн">Online</span>
+          </div>
+          <span class="debate-card__title">Should AI-generated art be eligible for traditional art prizes?</span>
+          <div class="debate-card__meta">
+            <span data-icon="user"><span data-en="by maria_v" data-ru="от maria_v">by maria_v</span></span>
+            <span data-icon="users"><span data-en="4 of 6 joined" data-ru="4 из 6 участников">4 of 6 joined</span></span>
+            <span data-icon="calendar"><span data-en="Opened 2 days ago" data-ru="Открыт 2 дня назад">Opened 2 days ago</span></span>
+          </div>
+        </a>
+        <a class="debate-card" href="debate.html">
+          <div class="debate-card__top">
+            <span class="badge status-awaiting" data-en="Awaiting" data-ru="Ожидание">Awaiting</span>
+            <span class="badge badge--secondary badge--no-dot" data-en="In person · Berlin" data-ru="Очно · Берлин">In person · Berlin</span>
+          </div>
+          <span class="debate-card__title">Is a four-day work week realistic for small businesses?</span>
+          <div class="debate-card__meta">
+            <span data-icon="user"><span data-en="by t.hoffmann" data-ru="от t.hoffmann">by t.hoffmann</span></span>
+            <span data-icon="users"><span data-en="Undetermined size" data-ru="Размер не задан">Undetermined size</span></span>
+            <span data-icon="calendar"><span data-en="Held 18 Jul, 19:00" data-ru="18 июля, 19:00">Held 18 Jul, 19:00</span></span>
+          </div>
+        </a>
+        <a class="debate-card" href="debate.html">
+          <div class="debate-card__top">
+            <span class="badge status-ongoing" data-en="Ongoing" data-ru="Идёт сейчас">Ongoing</span>
+            <span class="badge badge--secondary badge--no-dot" data-en="Online" data-ru="Онлайн">Online</span>
+          </div>
+          <span class="debate-card__title">Open-source vs. proprietary software in public institutions</span>
+          <div class="debate-card__meta">
+            <span data-icon="user"><span data-en="by devon.k" data-ru="от devon.k">by devon.k</span></span>
+            <span data-icon="users"><span data-en="8 of 8 joined" data-ru="8 из 8 участников">8 of 8 joined</span></span>
+            <span data-icon="calendar"><span data-en="Started 40 min ago" data-ru="Началось 40 мин назад">Started 40 min ago</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- CTA band -->
+    <section class="container">
+      <div class="cta-band">
+        <div>
+          <h2 data-en="Have something worth debating?" data-ru="Есть о чём поспорить?">Have something worth debating?</h2>
+          <p class="muted" data-en="Register in seconds and open your first debate. No email, no phone — just a username."
+             data-ru="Зарегистрируйтесь за секунды и откройте первый дебат. Без e-mail и телефона — только имя пользователя.">Register in seconds and open your first debate. No email, no phone — just a username.</p>
+        </div>
+        <a class="btn btn--accent btn--lg" href="register.html" data-en="Get started" data-ru="Начать">Get started</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

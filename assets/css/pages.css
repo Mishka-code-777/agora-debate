@@ -1,0 +1,146 @@
+/* ==========================================================================
+   Agora — Page-level / section styles
+   ========================================================================== */
+
+/* ---------------------- Hero (index) ---------------------- */
+.hero {
+  background:
+    radial-gradient(1100px 460px at 15% -10%, var(--primary-soft), transparent 60%),
+    radial-gradient(900px 420px at 100% 0%, var(--accent-soft), transparent 55%);
+  border-bottom: var(--border-w) solid var(--border);
+}
+.hero__inner {
+  padding-block: var(--sp-9) var(--sp-8);
+  max-width: 760px;
+}
+.eyebrow { display: inline-block; margin-bottom: var(--sp-3); }
+.hero__title {
+  font-size: var(--fs-4xl);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--sp-4);
+}
+.hero__lead {
+  font-size: var(--fs-lg);
+  color: var(--text-muted);
+  margin-bottom: var(--sp-5);
+  max-width: 62ch;
+}
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.hero__note { margin-top: var(--sp-2); }
+
+/* ---------------------- How it works ---------------------- */
+.how-grid { grid-template-columns: repeat(3, 1fr); }
+.how-step__num {
+  display: inline-grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--sp-3);
+}
+.how-step h3 { margin-bottom: var(--sp-2); }
+
+/* ---------------------- CTA band ---------------------- */
+.cta-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+  padding: var(--sp-6);
+  border-radius: var(--radius-lg);
+  background: var(--accent-soft);
+  border: var(--border-w) solid var(--border);
+}
+.cta-band h2 { margin-bottom: var(--sp-2); }
+
+/* ---------------------- List pages ---------------------- */
+.list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-4);
+}
+.list-count { color: var(--text-muted); font-size: var(--fs-sm); }
+
+.sort-btn { min-width: 190px; justify-content: space-between; }
+
+/* Filters panel */
+.filters-panel {
+  background: var(--surface);
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-5);
+  margin-bottom: var(--sp-5);
+}
+.filters-panel[hidden] { display: none; }
+.filters-panel__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-6);
+}
+.filters-panel__foot {
+  display: flex;
+  gap: var(--sp-3);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: var(--border-w) solid var(--border);
+}
+.filter-group__title {
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--sp-3);
+}
+
+/* "Published by" multi-row input */
+.pub-rows { display: grid; gap: var(--sp-2); }
+.pub-row { display: flex; gap: var(--sp-2); }
+.pub-row .input { flex: 1; }
+
+/* Status checklist */
+.status-checklist { display: grid; gap: var(--sp-1); }
+
+.applied-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-5);
+}
+
+@media (max-width: 860px) {
+  .how-grid { grid-template-columns: 1fr; }
+  .filters-panel__grid { grid-template-columns: 1fr; gap: var(--sp-5); }
+  .hero__title { font-size: var(--fs-3xl); }
+  .hero__inner { padding-block: var(--sp-7) var(--sp-6); }
+  .cta-band { flex-direction: column; align-items: flex-start; }
+}
+
+/* ---------------------- Auth pages ---------------------- */
+.auth-wrap {
+  max-width: 440px;
+  margin-inline: auto;
+  padding-block: var(--sp-7);
+}
+.auth-card { padding: var(--sp-6); }
+.auth-card h1 { margin-bottom: var(--sp-5); font-size: var(--fs-2xl); }
+.auth-alt { text-align: center; margin-top: var(--sp-5); font-size: var(--fs-sm); color: var(--text-muted); }
+
+/* ---------------------- Two-column detail layout ---------------------- */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--sp-6);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .detail-grid { grid-template-columns: 1fr; }
+}

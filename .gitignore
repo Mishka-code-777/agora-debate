@@ -1,0 +1,6 @@
+# Do not publish the client's spec or local scratch
+*.pdf
+debate_website_tech_spec.pdf
+.DS_Store
+Thumbs.db
+node_modules/

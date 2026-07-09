@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-en="Debates — Agora" data-ru="Дебаты — Agora">Debates — Agora</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("agora-theme");
+      if (t !== "light" && t !== "dark")
+        t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var l = localStorage.getItem("agora-lang");
+      if (l !== "en" && l !== "ru")
+        l = (navigator.language || "en").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      var r = document.documentElement;
+      r.setAttribute("data-theme", t); r.setAttribute("data-lang", l); r.lang = l;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&subset=cyrillic,latin" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+  <script>window.AGORA = { auth: "user", active: "debates", username: "sofia" };</script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-en="Skip to content" data-ru="Перейти к содержимому">Skip to content</a>
+  <div id="site-header"></div>
+
+  <main id="main" class="page"><div class="container">
+    <div class="list-head">
+      <div>
+        <h1 data-en="Debates" data-ru="Дебаты">Debates</h1>
+        <p class="list-count"><span data-en="Showing 128 debates" data-ru="Показано 128 дебатов">Showing 128 debates</span></p>
+      </div>
+    </div>
+
+    <!-- Toolbar: search (UX addition) + sort + filters toggle -->
+    <div class="toolbar">
+      <div class="search">
+        <span data-icon="search"></span>
+        <input class="input" type="search" data-en-ph="Search debates by topic…" data-ru-ph="Поиск дебатов по теме…" />
+      </div>
+
+      <div class="dropdown">
+        <button class="btn btn--ghost sort-btn" data-dropdown-toggle aria-expanded="false">
+          <span data-icon="sort"></span>
+          <span data-en="Newest first" data-ru="Сначала новые">Newest first</span>
+          <span data-icon="chevron"></span>
+        </button>
+        <div class="dropdown__menu" hidden role="listbox">
+          <div class="dropdown__label" data-en="Sort by" data-ru="Сортировка">Sort by</div>
+          <button class="dropdown__item" aria-checked="true" role="option"><span data-en="Publication date — newest first" data-ru="Дата публикации — сначала новые">Publication date — newest first</span></button>
+          <button class="dropdown__item" role="option"><span data-en="Publication date — oldest first" data-ru="Дата публикации — сначала старые">Publication date — oldest first</span></button>
+          <div class="dropdown__sep"></div>
+          <button class="dropdown__item" role="option"><span data-en="Date held — earliest first" data-ru="Дата проведения — сначала ближайшие">Date held — earliest first</span></button>
+          <button class="dropdown__item" role="option"><span data-en="Date held — latest first" data-ru="Дата проведения — сначала поздние">Date held — latest first</span></button>
+          <div class="dropdown__sep"></div>
+          <button class="dropdown__item" role="option"><span data-en="Name — A to Z" data-ru="Название — А→Я">Name — A to Z</span></button>
+          <button class="dropdown__item" role="option"><span data-en="Name — Z to A" data-ru="Название — Я→А">Name — Z to A</span></button>
+        </div>
+      </div>
+
+      <button class="btn btn--ghost" data-toggle="filters" data-target="filters-panel" aria-expanded="false" aria-controls="filters-panel">
+        <span data-icon="sliders"></span>
+        <span data-en="Filters" data-ru="Фильтры">Filters</span>
+        <span class="badge badge--primary badge--no-dot">2</span>
+      </button>
+    </div>
+
+    <!-- Applied filters -->
+    <div class="applied-filters">
+      <div class="filter-chips">
+        <span class="filter-chip"><span data-en="Status: Looking for participants" data-ru="Статус: Ищем участников">Status: Looking for participants</span><button data-en-aria="Remove filter" data-ru-aria="Убрать фильтр" data-icon="x"></button></span>
+        <span class="filter-chip"><span data-en="Published by: maria_v" data-ru="Автор: maria_v">Published by: maria_v</span><button data-en-aria="Remove filter" data-ru-aria="Убрать фильтр" data-icon="x"></button></span>
+      </div>
+      <button class="btn btn--link" data-en="Clear all applied filters" data-ru="Сбросить все фильтры">Clear all applied filters</button>
+    </div>
+
+    <!-- Filters panel -->
+    <section class="filters-panel" id="filters-panel" hidden aria-label="Filters">
+      <div class="filters-panel__grid">
+        <div class="filter-group">
+          <p class="filter-group__title" data-en="Published by" data-ru="Опубликовано пользователем">Published by</p>
+          <div class="pub-rows">
+            <div class="pub-row">
+              <input class="input" value="maria_v" data-en-ph="Username" data-ru-ph="Имя пользователя" />
+              <button class="icon-btn icon-btn--bordered icon-btn--danger" data-en-aria="Remove row" data-ru-aria="Удалить строку" data-icon="x"></button>
+            </div>
+            <div class="pub-row">
+              <input class="input" data-en-ph="Username" data-ru-ph="Имя пользователя" />
+              <button class="icon-btn icon-btn--bordered" data-en-aria="Add row" data-ru-aria="Добавить строку" data-icon="plus"></button>
+            </div>
+          </div>
+          <p class="field-hint" data-en="A new row appears when the previous one is filled." data-ru="Новая строка появляется, когда заполнена предыдущая.">A new row appears when the previous one is filled.</p>
+        </div>
+
+        <div class="filter-group">
+          <p class="filter-group__title" data-en="Debate status" data-ru="Статус дебата">Debate status</p>
+          <div class="status-checklist">
+            <label class="choice"><input type="checkbox" /><span data-en="Ongoing" data-ru="Идёт сейчас">Ongoing</span></label>
+            <label class="choice"><input type="checkbox" checked /><span data-en="Looking for participants" data-ru="Ищем участников">Looking for participants</span></label>
+            <label class="choice"><input type="checkbox" /><span data-en="Awaiting" data-ru="Ожидание">Awaiting</span></label>
+            <label class="choice"><input type="checkbox" /><span data-en="Cancelled" data-ru="Отменён">Cancelled</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="filters-panel__foot">
+        <button class="btn btn--ghost" data-toggle="filters" data-target="filters-panel" data-en="Cancel" data-ru="Отмена">Cancel</button>
+        <button class="btn btn--primary" data-en="Apply filters" data-ru="Применить фильтры">Apply filters</button>
+      </div>
+    </section>
+
+    <!-- Debate list -->
+    <div class="list">
+      <a class="debate-card" href="debate.html">
+        <div class="debate-card__top">
+          <span class="badge status-looking" data-en="Looking for participants" data-ru="Ищем участников">Looking for participants</span>
+          <span class="badge badge--secondary badge--no-dot" data-en="Online" data-ru="Онлайн">Online</span>
+        </div>
+        <span class="debate-card__title">Should AI-generated art be eligible for traditional art prizes?</span>
+        <div class="debate-card__meta">
+          <span data-icon="user"><span data-en="by maria_v" data-ru="от maria_v">by maria_v</span></span>
+          <span data-icon="users"><span data-en="4 of 6 joined" data-ru="4 из 6 участников">4 of 6 joined</span></span>
+          <span data-icon="calendar"><span data-en="Opened 2 days ago" data-ru="Открыт 2 дня назад">Opened 2 days ago</span></span>
+        </div>
+      </a>
+      <a class="debate-card" href="debate.html">
+        <div class="debate-card__top">
+          <span class="badge status-awaiting" data-en="Awaiting" data-ru="Ожидание">Awaiting</span>
+          <span class="badge badge--secondary badge--no-dot" data-en="In person · Berlin" data-ru="Очно · Берлин">In person · Berlin</span>
+        </div>
+        <span class="debate-card__title">Is a four-day work week realistic for small businesses?</span>
+        <div class="debate-card__meta">
+          <span data-icon="user"><span data-en="by t.hoffmann" data-ru="от t.hoffmann">by t.hoffmann</span></span>
+          <span data-icon="users"><span data-en="Undetermined size" data-ru="Размер не задан">Undetermined size</span></span>
+          <span data-icon="calendar"><span data-en="Held 18 Jul, 19:00" data-ru="18 июля, 19:00">Held 18 Jul, 19:00</span></span>
+        </div>
+      </a>
+      <a class="debate-card" href="debate.html">
+        <div class="debate-card__top">
+          <span class="badge status-ongoing" data-en="Ongoing" data-ru="Идёт сейчас">Ongoing</span>
+          <span class="badge badge--secondary badge--no-dot" data-en="Online" data-ru="Онлайн">Online</span>
+        </div>
+        <span class="debate-card__title">Open-source vs. proprietary software in public institutions</span>
+        <div class="debate-card__meta">
+          <span data-icon="user"><span data-en="by devon.k" data-ru="от devon.k">by devon.k</span></span>
+          <span data-icon="users"><span data-en="8 of 8 joined" data-ru="8 из 8 участников">8 of 8 joined</span></span>
+          <span data-icon="calendar"><span data-en="Started 40 min ago" data-ru="Началось 40 мин назад">Started 40 min ago</span></span>
+        </div>
+      </a>
+      <a class="debate-card" href="debate.html">
+        <div class="debate-card__top">
+          <span class="badge status-looking" data-en="Looking for participants" data-ru="Ищем участников">Looking for participants</span>
+          <span class="badge badge--secondary badge--no-dot" data-en="In person · Prague" data-ru="Очно · Прага">In person · Prague</span>
+        </div>
+        <span class="debate-card__title">Should city centres be car-free by 2030?</span>
+        <div class="debate-card__meta">
+          <span data-icon="user"><span data-en="by lucie" data-ru="от lucie">by lucie</span></span>
+          <span data-icon="users"><span data-en="2 of 10 joined" data-ru="2 из 10 участников">2 of 10 joined</span></span>
+          <span data-icon="calendar"><span data-en="Opened 5 days ago" data-ru="Открыт 5 дней назад">Opened 5 days ago</span></span>
+        </div>
+      </a>
+      <a class="debate-card" href="debate.html">
+        <div class="debate-card__top">
+          <span class="badge status-cancelled" data-en="Cancelled" data-ru="Отменён">Cancelled</span>
+          <span class="badge badge--secondary badge--no-dot" data-en="Online" data-ru="Онлайн">Online</span>
+        </div>
+        <span class="debate-card__title">Universal basic income: safety net or moral hazard?</span>
+        <div class="debate-card__meta">
+          <span data-icon="user"><span data-en="by arjun_p" data-ru="от arjun_p">by arjun_p</span></span>
+          <span data-icon="users"><span data-en="Cancelled by author" data-ru="Отменён автором">Cancelled by author</span></span>
+          <span data-icon="calendar"><span data-en="Opened 1 week ago" data-ru="Открыт неделю назад">Opened 1 week ago</span></span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Pagination -->
+    <nav class="pagination" aria-label="Pagination">
+      <span aria-current="page">1</span>
+      <a href="#">2</a>
+      <a href="#">3</a>
+      <a href="#">…</a>
+      <a href="#">13</a>
+      <a href="#" data-en-aria="Next page" data-ru-aria="Следующая страница" data-icon="chevron" style="transform:rotate(-90deg)"></a>
+    </nav>
+  </div></main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
