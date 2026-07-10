@@ -210,8 +210,12 @@ window.Store = (function () {
   /* ============================ mode selection ============================ */
   var B = DEMO;
   async function init() {
-    // No point probing an API when opened as a local file — go straight to demo.
-    if (location.protocol !== "file:") {
+    // Skip the API probe where we know there is no backend (local file, or the
+    // static GitHub Pages demo) so the console stays clean. Everywhere else,
+    // probe: if a backend answers, use it; otherwise fall back to demo.
+    var host = location.hostname || "";
+    var forceDemo = location.protocol === "file:" || /(^|\.)github\.io$/i.test(host);
+    if (!forceDemo) {
       try {
         var r = await fetch("/api/me", { credentials: "same-origin" });
         if (r.ok) {
