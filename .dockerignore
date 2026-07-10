@@ -1,0 +1,8 @@
+.git
+node_modules
+server/node_modules
+server/data
+*.log
+*.pdf
+debate_website_tech_spec.pdf
+.claude

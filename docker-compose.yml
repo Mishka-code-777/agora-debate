@@ -1,0 +1,16 @@
+services:
+  agora:
+    build: .
+    container_name: agora
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Uncomment ONLY if you serve over plain HTTP with no TLS in front:
+      # - AGORA_SECURE=false
+    volumes:
+      - agora-data:/data      # SQLite database persists here across redeploys
+    restart: unless-stopped
+
+volumes:
+  agora-data:

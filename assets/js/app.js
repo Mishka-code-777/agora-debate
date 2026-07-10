@@ -248,7 +248,7 @@
     var s = session();
     var createBtn = s.auth === "user"
       ? '<a class="btn btn--accent desktop-only" href="debate-config.html">' + icon("plus") + "<span " + bi("New debate", "Создать дебат") + ">New debate</span></a>" : "";
-    var unread = s.auth === "user" && window.Store ? Store.unreadCount(s.username) : 0;
+    var unread = window.Store && s.auth === "user" ? Store.unread() : 0;
     var bell = s.auth === "user"
       ? '<a class="icon-btn ' + (unread > 0 ? "has-badge" : "") + '" href="notifications.html" data-en-aria="Notifications" data-ru-aria="Уведомления">' + icon("bell") + "</a>" : "";
     return (
@@ -275,16 +275,19 @@
     );
   }
   function buildFooter() {
+    // The "data lives in your browser" note + reset only make sense in demo mode.
+    var proto = window.Store && Store.mode && Store.mode() === "demo"
+      ? '<div class="site-footer__proto text-xs subtle">' +
+          '<span ' + bi("Front-end prototype — your data is stored only in this browser.", "Фронтенд-прототип — данные хранятся только в этом браузере.") + ">Front-end prototype — your data is stored only in this browser.</span> " +
+          '<button class="btn btn--link text-xs" data-action="reset-demo" ' + bi("Reset demo data", "Сбросить демо-данные") + ">Reset demo data</button>" +
+        "</div>"
+      : "";
     return (
       '<footer class="site-footer"><div class="container">' +
         '<div class="site-footer__inner">' +
           '<div><span data-en-html="Developed by SPOF Code · Design by Agora" data-ru-html="Разработка — SPOF Code · Дизайн — Agora">Developed by SPOF Code · Design by Agora</span></div>' +
           "<div>© SPOF Code. All rights reserved. 2026</div>" +
-        "</div>" +
-        '<div class="site-footer__proto text-xs subtle">' +
-          '<span ' + bi("Front-end prototype — your data is stored only in this browser.", "Фронтенд-прототип — данные хранятся только в этом браузере.") + ">Front-end prototype — your data is stored only in this browser.</span> " +
-          '<button class="btn btn--link text-xs" data-action="reset-demo" ' + bi("Reset demo data", "Сбросить демо-данные") + ">Reset demo data</button>" +
-        "</div>" +
+        "</div>" + proto +
       "</div></footer>"
     );
   }
@@ -413,10 +416,14 @@
       if ((el = e.target.closest("[data-set-lang]"))) { setLang(el.getAttribute("data-set-lang")); return; }
 
       if ((el = e.target.closest('[data-action="logout"]'))) {
-        e.preventDefault(); if (window.Store) Store.logout(); location.href = "index.html"; return;
+        e.preventDefault();
+        Promise.resolve(window.Store && Store.logout()).then(function () { location.href = "index.html"; });
+        return;
       }
       if ((el = e.target.closest('[data-action="reset-demo"]'))) {
-        e.preventDefault(); if (window.Store) Store.resetDemo(); location.reload(); return;
+        e.preventDefault();
+        Promise.resolve(window.Store && Store.resetDemo()).then(function () { location.reload(); });
+        return;
       }
       if ((el = e.target.closest("[data-toggle-password]"))) {
         var inp = document.getElementById(el.getAttribute("data-toggle-password"));
@@ -501,13 +508,17 @@
   };
 
   /* ---------------------- boot ---------------------- */
-  function boot() {
+  async function boot() {
+    try { if (window.Store) await Store.init(); } catch (err) { console.error(err); }
     var h = document.getElementById("site-header"); if (h) h.outerHTML = buildHeader();
     var f = document.getElementById("site-footer"); if (f) f.outerHTML = buildFooter();
-    if (typeof window.agoraPage === "function") { try { window.agoraPage(); } catch (err) { console.error(err); } }
     setLang(initialLang()); setTheme(initialTheme());
     injectIcons();
     wire();
+    if (typeof window.agoraPage === "function") {
+      try { await window.agoraPage(); } catch (err) { console.error(err); }
+    }
+    applyI18n(lang()); injectIcons(); // localize anything the page rendered
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();

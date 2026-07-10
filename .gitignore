@@ -4,3 +4,7 @@ debate_website_tech_spec.pdf
 .DS_Store
 Thumbs.db
 node_modules/
+
+# Backend runtime artifacts (never commit the live database or logs)
+server/data/
+*.log

@@ -78,9 +78,9 @@
   <div id="site-footer"></div>
   <script src="assets/js/store.js"></script>
   <script>
-    window.agoraPage = function () {
+    window.agoraPage = async function () {
       var name = Agora.qs("u");
-      var u = name && Store.getUser(name);
+      var u = name && await Store.getUser(name);
 
       var root = document.getElementById("user-root");
 
@@ -111,9 +111,9 @@
       }
 
       // Debate sections
-      var created = Store.getDebates({ author: u.username });
-      var participating = Store.getDebates({ participant: u.username }).filter(function (d) { return d.status !== "cancelled"; });
-      var before = Store.getDebates({ participant: u.username }).filter(function (d) { return d.status === "cancelled"; });
+      var created = await Store.getDebates({ author: u.username });
+      var participating = (await Store.getDebates({ participant: u.username })).filter(function (d) { return d.status !== "cancelled"; });
+      var before = (await Store.getDebates({ participant: u.username })).filter(function (d) { return d.status === "cancelled"; });
 
       function debateSection(titleEn, titleRu, list, noteEn, noteRu) {
         return (
@@ -187,14 +187,14 @@
       });
 
       // Confirm report
-      document.getElementById("confirm-report-user").addEventListener("click", function () {
+      document.getElementById("confirm-report-user").addEventListener("click", async function () {
         if (!Store.currentUser()) {
           location.href = "login.html?next=" + encodeURIComponent(location.pathname.split("/").pop() + location.search);
           return;
         }
         var reason = (document.querySelector('input[name="reason"]:checked') || {}).value || "explicit-language";
         var description = reason === "other" ? document.getElementById("report-desc").value.trim() : "";
-        Store.addReport({ type: "user", targetId: u.username, reason: reason, description: description });
+        await Store.addReport({ type: "user", targetId: u.username, reason: reason, description: description });
         Agora.toast(Agora.t("Report submitted", "Жалоба отправлена"), "success");
         var back = document.getElementById("report-user-dialog");
         back.hidden = true; document.body.style.overflow = "";
