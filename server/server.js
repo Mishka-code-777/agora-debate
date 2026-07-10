@@ -167,4 +167,7 @@ app.use((req, res) => {
   res.status(404).sendFile(path.join(ROOT, "404.html"));
 });
 
-app.listen(PORT, () => console.log("Agora server on http://localhost:" + PORT));
+// Bind to HOST (default all interfaces for local dev; set HOST=127.0.0.1 in
+// production so the app is reachable only through the reverse proxy).
+const HOST = process.env.HOST || "0.0.0.0";
+app.listen(PORT, HOST, () => console.log("Agora server on http://" + HOST + ":" + PORT));
